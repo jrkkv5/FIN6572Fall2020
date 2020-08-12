@@ -1,0 +1,27 @@
+---
+title: "Chapter 1 / Some Basics with Financial Data"
+author: "Tim Dombrowski"
+date: "8/24/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Importing Data
+
+For this exercise, we will import a series of 222 monthly observations of the U.S. National Debt using the public API from fiscaldata.treasury.gov (https://twitter.com/stlouisfed/status/1290415916430262278). Hint: it can sometimes be useful to break down urls into pieces if multiple calls to the same source will be made.
+
+
+```{Specify API Call and Retrieve Data}
+require(httr)
+require(jsonlite)
+urlbase = "https://transparency.treasury.gov/services/api/fiscal_service"
+urlend = "/v1/debt/mspd/mspd_table_1"
+urlfull = paste(urlbase,urlend,sep="")
+raw = GET(urlfull)
+```
+

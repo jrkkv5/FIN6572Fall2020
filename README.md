@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Finance 3572/6572 Fall 2020
 
 ## UMSL College of Business Administration
