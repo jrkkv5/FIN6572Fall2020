@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Finance 3572/6572 Course Syllabus Fall 2020
 
 ## _UMSL College of Business Administration_
@@ -29,3 +30,8 @@ The lowest cost content has been sourced.  If you choose to opt out of the conte
 Your AutoAccess course may have a Print Upgrade available as an additional purchase.  This is a low-cost version of the printed text made available by the publisher at a reduced cost.  It is the publisher’s requirement that in order to purchase the additional print, you must be opted in for the AutoAccess digital required material.  If you have questions about Print Upgrades and opting out, please contact us at https://autoaccess.umsltritonstore.com.
 
 If you have any questions please contact the Triton Store 314-516-5763, email autoaccess@umsl.edu or visit https://autoaccess.umsltritonstore.com
+=======
+# FIN6572Fall2020
+
+Welcome to our course GitHub page for Finance 3572/6572 at UMSL. This is where we will keep all of our R code and collaborate on group projects.
+>>>>>>> debc433529fd868094264d8bcc96faf52e33070a
