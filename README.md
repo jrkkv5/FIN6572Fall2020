@@ -1,18 +1,12 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
-
-# Finance 3572/6572 Fall 2020
+# Finance 3572/6572 Course Syllabus Fall 2020
 
 ## _UMSL College of Business Administration_
 
-### FIN 3572 - Financial Data Programming / FIN 6572 Financial Data Analytics
+## FIN 3572 - Financial Data Programming / FIN 6572 Financial Data Analytics
 
 ### Fall 2020 -- Online
 
-**Course Instructor:** Tim Dombrowski
+## **Course Instructor:** Tim Dombrowski
 
 **Office:** 232 Anheuser-Busch Hall
 
