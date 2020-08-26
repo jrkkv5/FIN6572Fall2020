@@ -1,28 +1,53 @@
 ---
-title: "Importing and Plotting the U.S. National Debt from U.S. Treasury API"
-author: "Tim Dombrowski"
-date: "8/26/2020"
-output:
-  html_document: default
-  pdf_document: default
+title: "U.S. National Debt Over Time"
+output: html_notebook
 ---
 
-```{r setup, include=FALSE}
-install.packages('knitr', dependencies = TRUE)
-knitr::opts_chunk$set(echo = TRUE)
-```
+#### For this exercise, we will import a series of 222 monthly observations of the U.S. National Debt using the public API from <https://fiscaldata.treasury.gov> (see <https://twitter.com/stlouisfed/status/1290415916430262278>).
 
-## Importing the Data
-
-For this exercise, we will import a series of 222 monthly observations of the U.S. National Debt using the public API from fiscaldata.treasury.gov (https://twitter.com/stlouisfed/status/1290415916430262278). Hint: it can sometimes be useful to break down urls into pieces if multiple calls to the same source will be made.
-
-# Specify API Call and Retrieve Data
-```{r api}
+The preliminary step is loading in the required packages. For this task, we will need the httr and jsonlite packages.
+```{r loadpackages, include=FALSE}
 require(httr)
 require(jsonlite)
-urlbase = "https://transparency.treasury.gov/services/api/fiscal_service"
-urlend = "/v1/debt/mspd/mspd_table_1"
-urlfull = paste(urlbase,urlend,sep="")
-raw = GET(urlfull)
 ```
 
+Before requesting the full series of the national debt, we will replicate the example API request from <https://fiscaldata.treasury.gov/datasets/monthly-statement-public-debt/>.
+
+First, we will specify the base url for the fiscal data API.
+```{r example1}
+urlbase = "https://transparency.treasury.gov/services/api/fiscal_service"
+```
+
+Then, we add the endpoint for the "Summary of Treasury Securities Outstanding" table. The paste function allows for us to concatenete the two strings to create the full url.
+```{r example2}
+urlend = "/v1/debt/mspd/mspd_table_1"
+urlfull = paste(urlbase,urlend,sep="")
+urlfull
+```
+
+After we create the full url string, we now want to specify any parameters. For this example, we want to sort the data by date (record_date), specify a JSON response, and retrieve only the first observation after the sorting. The '-' before record_date in the first parameter sorts the dates in descending order so that the most recent observation is at the top. The JSON format option is actually unnecessary as it is the default response format, but if we wanted to receive csv or xml formatted response, we would specify that here. For requesting only the first observation, this consists of two parts: page[size] specifies how any observations in each response and page[number] specifies which 'page' to request (if we wanted the second observation, then we would keep page[size] as is and switch to page[number]=2). Note: the first parameter is indicated by '?' and each subsequent parameter is separated with an '&'.
+```{r example3}
+opt1 = "?sort=-record_date"
+opt2 = "&format=json"
+opt3 = "&page[number]=1&page[size]=1"
+request1 = paste(urlfull,opt1,opt2,opt3,sep='')
+request1
+```
+
+Now we can request the data from the API using the GET function.
+```{r req1}
+response1 = GET(request1)
+response1
+```
+
+Since the content is returned in raw bytes, we must convert this to text, which will output the JSON response as a character array.
+```{r req1json}
+jsonresponse1 = content(response1,"text")
+jsonresponse1
+```
+
+Then, to convert this JSON response to something workable in R, we use the fromJSON function to convert the response to a data frame.
+```{r req1dataframe}
+dfresponse1 = fromJSON(jsonresponse1)
+dfresponse1$data
+```
