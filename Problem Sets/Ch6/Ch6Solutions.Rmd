@@ -1,0 +1,128 @@
+---
+title: "Chapter 6 Problem Set Solutions"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r packages}
+library(readxl)
+setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch6")
+```
+
+### 6.3
+
+```{r 6.3data}
+myData = read_xlsx("Ch6_Q15_Data_File.xlsx")
+```
+
+```{r 6.3}
+Model = lm(Price ~ Sqft + Beds + Baths + Colonial, data = myData)
+summary(Model)
+```
+
+
+### 6.4
+
+```{r 6.4data}
+myData = read_xlsx("Ch6_Q21_Data_File.xlsx")
+```
+
+```{r 6.4}
+Model = lm(Property_Taxes ~ Size, data = myData)
+summary(Model)
+```
+
+
+### 6.5
+
+```{r 6.5data}
+myData = read_xlsx("Ch6_Q26_Data_File.xlsx")
+```
+
+```{r 6.5}
+Model = lm(Ownership ~ Income, data = myData)
+summary(Model)
+```
+
+
+### 6.6
+
+```{r 6.6data}
+myData = read_xlsx("Ch6_Q37_Data_File.xlsx")
+```
+
+```{r 6.6a}
+Model = lm(R_Rf ~ RM_Rf, data = myData)
+summary(Model)
+```
+
+$t = \dfrac{1.2612-1}{0.2398}$
+```{r 6.6b}
+Modelcov = vcov(Model)
+t = (Model[["coefficients"]][["RM_Rf"]]-1)/sqrt(Modelcov[2,2])
+t
+pt(-t,length(myData$RM_Rf))
+```
+
+
+### 6.7
+
+See regression output from 6.3. It is same data.
+
+
+### 6.8
+
+```{r 6.8data}
+myData = read_xlsx("Ch6_Q47_Data_File.xlsx")
+```
+
+a.
+```{r 6.8a}
+Model = lm(y ~ x + d1 + d2 + d3, data = myData)
+summary(Model)
+```
+
+d.
+```{r 6.8d}
+Model2 <- lm(y ~ x + d2 + d3 + d4, data = myData)
+summary(Model2)
+```
+
+
+### 6.9
+
+```{r 6.9data}
+myData = read_xlsx("Ch6_Q59_Data_File.xlsx")
+```
+
+a.
+```{r 6.9a}
+Model = lm(Healthy ~ FV + Exercise + Smoke, data = myData)
+summary(Model)
+```
+
+b.
+```{r 6.9b}
+cor(myData[,2:5])
+residuals<-resid(Model)
+plot(residuals~FV,myData)
+plot(residuals~Exercise,myData)
+plot(residuals~Smoke,myData)
+```
+
+
+### 6.10
+
+```{r 6.10data}
+myData = read_xlsx("Ch6_Q61_Data_File.xlsx")
+```
+
+a.
+```{r 6.10a}
+Model = lm(Consumption ~ Income, data = myData)
+summary(Model)
+residuals<-resid(Model)
+T<-seq(1,length(residuals))
+plot(residuals~T)
+```
