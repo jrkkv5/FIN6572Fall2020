@@ -1,6 +1,8 @@
 ---
 title: "Chapter 3 Problem Set"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r packages}
