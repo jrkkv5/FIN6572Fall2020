@@ -1,0 +1,237 @@
+---
+title: "Chapter 7 Problem Set Solutions"
+output: html_notebook
+---
+
+```{r packages}
+library(ggplot2)
+library(readxl)
+setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch7")
+```
+
+### 7.1
+
+```{r 7.1data}
+myData = read_xlsx("Ch7_Q4_Data_File.xlsx")
+```
+
+Model 1 (No Interaction):
+```{r 7.1a}
+Model1 <- lm(y ~ x + d1 + d2, data = myData)
+summary(Model1)
+```
+
+Model 2 (Interaction):
+```{r 7.1b}
+Model2 <- lm(y ~ x + d1 + d2 + d1*d2, data = myData)
+summary(Model2)
+```
+
+Calculate predicted values from Model 1.
+```{r 7.1c}
+x = 20
+d1 = 1
+d2 = 0
+Model1$coefficients[1] + Model1$coefficients[2]*x + Model1$coefficients[3]*d1 + Model1$coefficients[4]*d2
+d2 = 1
+Model1$coefficients[1] + Model1$coefficients[2]*x + Model1$coefficients[3]*d1 + Model1$coefficients[4]*d2
+```
+
+
+### 7.2
+
+```{r 7.2data}
+myData = read_xlsx("Ch7_Q9_Data_File.xlsx")
+```
+
+a.1 Multiple Linear Regression Model:
+```{r 7.2a1}
+Model1 <- lm(Income~ Hours + Hot + Holiday, data = myData)
+summary(Model1)
+```
+
+a.2 Predict scenarios:
+```{r 7.2a2}
+hours = 6
+hot = 1
+holiday = 1
+Model1$coefficients[1] + Model1$coefficients[2]*hours + Model1$coefficients[3]*hot + Model1$coefficients[4]*holiday
+holiday = 0
+Model1$coefficients[1] + Model1$coefficients[2]*hours + Model1$coefficients[3]*hot + Model1$coefficients[4]*holiday
+```
+
+b.1 Multiple Linear Regression Model (with Interaction):
+```{r 7.2b1}
+Model2 <- lm(Income ~ Hours + Hot + Holiday + Hot*Holiday, data = myData)
+summary(Model2)
+```
+
+b.2 Predict scenarios:
+```{r 7.2b2}
+hours = 6
+hot = 1
+holiday = 1
+Model2$coefficients[1] + Model2$coefficients[2]*hours + Model2$coefficients[3]*hot + Model2$coefficients[4]*holiday + Model2$coefficients[5]*hot*holiday
+holiday = 0
+Model2$coefficients[1] + Model2$coefficients[2]*hours + Model2$coefficients[3]*hot + Model2$coefficients[4]*holiday + Model2$coefficients[5]*hot*holiday
+```
+
+
+### 7.3
+
+```{r 7.3data}
+myData = read_xlsx("Ch7_Q11_Data_File.xlsx")
+```
+
+a. Model 1: Linear Regression of Consumption on Income
+```{r 7.3a}
+Model1 <- lm(Consumption ~ Income, data = myData)
+summary(Model1)
+income = 75000
+Model1$coefficients[1] + Model1$coefficients[2]*income
+ggplot(myData,aes(y=Consumption,x=Income))+geom_point()+geom_smooth(method="lm")
+```
+
+b. Model 2: Include urban dummy (allow for each type of community to have a distinct intercept, but same slope)
+```{r 7.3b1}
+Model2 <- lm(Consumption ~ Income + Urban, data = myData)
+summary(Model2)
+equation1=function(x){coef(Model2)[1]+coef(Model2)[2]*x}
+equation2=function(x){coef(Model2)[1]+coef(Model2)[2]*x+coef(Model2)[3]}
+ggplot(myData,aes(y=Consumption,x=Income,color=Urban))+geom_point()+
+        stat_function(fun=equation1,geom="line",color=scales::hue_pal()(2)[1])+
+        stat_function(fun=equation2,geom="line",color=scales::hue_pal()(2)[2])
+```
+
+Predict consumption for family with $75k income in urban vs. rural communities.
+```{r 7.3b2}
+urban = 1
+Model2$coefficients[1] + Model2$coefficients[2]*income + Model2$coefficients[3]*urban
+urban = 0
+Model2$coefficients[1] + Model2$coefficients[2]*income + Model2$coefficients[3]*urban
+```
+
+c. Model 3: Include interaction between urban dummy and income (allow for distinct intercepts and distinct slopes across the two community types)
+```{r 7.3c1}
+Model3 <- lm(Consumption ~ Income + Urban + Income*Urban, data = myData)
+summary(Model3)
+```
+
+Predict consumption for family with $75k income in urban vs. rural communities using Model 3.
+```{r 7.3c2}
+urban = 1
+Model3$coefficients[1] + Model3$coefficients[2]*income + Model3$coefficients[3]*urban + Model3$coefficients[4]*income*urban
+urban = 0
+Model3$coefficients[1] + Model3$coefficients[2]*income + Model3$coefficients[3]*urban + Model3$coefficients[4]*income*urban
+```
+
+
+### 7.4
+
+a. Plot the quadratic relation: $\hat{y} = 20 + 1.9x - 0.05x^2$. Plug in $x=10,20,30$ for predicted values.
+```{r 7.4}
+x = 0:40
+y = 20 + 1.9*x - 0.05*x^2
+plot(x,y,'l')
+```
+
+b. The predicted response $\hat{y}$ is maximized when first derivative is equal to 0:
+
+$\dfrac{dy}{dx} = 1.9 - 2*0.05x = 0 \implies x = \dfrac{1.9}{0.1} = 19$
+
+
+### 7.5
+
+Use each of the model designs to calculate the predicted repsonses.
+
+
+### 7.6
+
+```{r 7.6data}
+myData = read_xlsx("Ch7_Q33_Data_File.xlsx")
+```
+
+Model 1: Linear Model ($y=X\beta+\epsilon$)
+```{r 7.6a1}
+Model1 <- lm(Rent ~ Beds+Baths+Sqft, data = myData)
+summary(Model1)
+ggplot(myData,aes(y=Rent,x=Sqft))+geom_point()+geom_smooth(method="lm")
+```
+
+Model 2: Exponential Model ($\ln(y) = X\beta+\epsilon$)
+```{r 7.6a1}
+Model2 <- lm(log(Rent) ~ Beds+Baths+Sqft, data = myData)
+summary(Model2)
+```
+
+b. Predict rent for a \$1,500 sq.ft. house with 3 bed and 2 bath. For the exponential model, we must first calculate the bias correction term ($\sigma^2/2$) and add that before applying the exponential function.
+```{r 7.6b}
+bed = 3
+bath = 2
+size = 1500
+Model1$coefficients[1] + Model1$coefficients[2]*bed + Model1$coefficients[3]*bath + Model1$coefficients[4]*size
+SE<-summary(Model2)$sigma
+exp(Model2$coefficients[1] + Model2$coefficients[2]*bed + Model2$coefficients[3]*bath + Model2$coefficients[4]*size + (SE^2/2))
+```
+
+
+c. Calculate $R^2$ for Model 2 by calculating fitted values for y and computing the correlation between  the predicted and actual y values.
+```{r}
+Pred_lny<-predict(Model2)
+Pred_y<-exp(Pred_lny+SE^2/2)
+cor(myData$Rent, Pred_y)^2
+```
+
+
+### 7.7
+
+```{r 7.7data}
+myData = read_xlsx("Ch7_Q35_Data_File.xlsx")
+names(myData)[1] = "TimePerUnit"
+names(myData)[2] = "UnitNumber"
+```
+
+Model 1: Linear Regression ($y=X*\beta+\epsilon$)
+```{r 7.7a}
+Model1 <- lm(TimePerUnit ~ UnitNumber, data = myData)
+summary(Model1)
+```
+
+Model 2: Logarithmic Regression ($y=\ln(X)*\beta+\epsilon$)
+```{r 7.7b}
+Model <- lm(TimePerUnit ~ log(UnitNumber), data = myData)
+summary(Model)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

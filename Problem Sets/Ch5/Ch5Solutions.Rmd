@@ -7,6 +7,7 @@ output:
 
 ```{r packages}
 library(readxl)
+library(ggplot2)
 setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch5")
 ```
 
@@ -142,12 +143,21 @@ pt(t,44)
 myData = read_xlsx("Ch05_Q47__Data_File.xlsx")
 ```
 
+Plot histogram and investigate:
+```{r 5.10b}
+hist(myData$Debt,
+     main="Histogram of Average Debt Payments Across 26 Metropolitan Areas",
+     xlab="Average Monthly Debt Payments",
+     breaks=5)
+```
+
 Calculate t-statstic:
 ```{r 5.10c}
 mu = mean(myData$Debt)
 s = sd(myData$Debt)
 t = (900-mu)/(s/sqrt(length(myData$Debt)))
 t
+t.test(myData$Debt, mu=900)
 ```
 
 
