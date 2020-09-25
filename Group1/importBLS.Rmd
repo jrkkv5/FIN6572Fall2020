@@ -17,7 +17,9 @@ setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Group1/")
 
 See example 2 at <https://github.com/mikeasilva/blsAPI> and adapt code.
 
-Pull the data via the API:
+Note: Create your own API key at <https://data.bls.gov/registrationEngine/> and insert the key they email you as the registration key parameter.
+
+Pull the data via the API: 
 ```{r import}
 unemp = data.frame()
 startyear = 1948
@@ -53,15 +55,7 @@ for (i in 1:nreq){
   endyear=endyear+10
 }
 index <- with(unemp, order(year, period))
-unemp2 = unemp[index, ]
-```
-
-Process results into data frame:
-```{r clean}
-## Process results
-
-
-unemployed.df <- apiDF(json$Results$series[[1]]$data)
+unemp = unemp[index, ]
 ```
 
 

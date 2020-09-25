@@ -1762,16 +1762,21 @@ summary {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkZXZ0b29scylcbmxpYnJhcnkocmVhZHhsKVxubGlicmFyeShibHNBUEkpXG5saWJyYXJ5KHJqc29uKVxuc2V0d2QoXCJDOi9Vc2Vycy90aW1tYS9Eb2N1bWVudHMvR2l0SHViL0ZJTjY1NzJGYWxsMjAyMC9Hcm91cDEvXCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(devtools)
-library(readxl)
-library(blsAPI)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkZXZ0b29scylcbmBgYCJ9 -->
+<pre class="r"><code>library(devtools)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiB1c2V0aGlzXG4ifQ== -->
+<pre><code>Loading required package: usethis</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShibHNBUEkpXG5saWJyYXJ5KHJqc29uKVxuc2V0d2QoXCJDOi9Vc2Vycy90aW1tYS9Eb2N1bWVudHMvR2l0SHViL0ZJTjY1NzJGYWxsMjAyMC9Hcm91cDEvXCIpXG5gYGAifQ== -->
+<pre class="r"><code>library(blsAPI)
 library(rjson)
 setwd(&quot;C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Group1/&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>See example 2 at <a href="https://github.com/mikeasilva/blsAPI" class="uri">https://github.com/mikeasilva/blsAPI</a> and adapt code.</p>
+<p>Note: Create your own API key at <a href="https://data.bls.gov/registrationEngine/" class="uri">https://data.bls.gov/registrationEngine/</a> and insert the key they email you as the registration key parameter.</p>
 <p>Pull the data via the API:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
@@ -1813,35 +1818,15 @@ for (i in 1:nreq){
 <!-- rnb-output-begin eyJkYXRhIjoiZGF0YSBsZW5ndGggWzVdIGlzIG5vdCBhIHN1Yi1tdWx0aXBsZSBvciBtdWx0aXBsZSBvZiB0aGUgbnVtYmVyIG9mIGNvbHVtbnMgWzRdXG4ifQ== -->
 <pre><code>data length [5] is not a sub-multiple or multiple of the number of columns [4]</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Process results into data frame:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgUHJvY2VzcyByZXN1bHRzXG5hcGlERiA8LSBmdW5jdGlvbihkYXRhKXtcbiAgZGYgPC0gZGF0YS5mcmFtZSh5ZWFyPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgIHBlcmlvZD1jaGFyYWN0ZXIoKSxcbiAgICAgICAgICAgICAgICAgICBwZXJpb2ROYW1lPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgIHZhbHVlPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgIHN0cmluZ3NBc0ZhY3RvcnM9RkFMU0UpXG4gIFxuICBpIDwtIDBcbiAgZm9yKGQgaW4gZGF0YSl7XG4gICAgaSA8LSBpICsgMVxuICAgIGRmW2ksXSA8LSB1bmxpc3QoZClcbiAgfVxuICByZXR1cm4oZGYpXG59XG5cbnVuZW1wbG95ZWQuZGYgPC0gYXBpREYoanNvbiRSZXN1bHRzJHNlcmllc1tbMV1dJGRhdGEpXG5gYGAifQ== -->
-<pre class="r"><code>## Process results
-apiDF &lt;- function(data){
-  df &lt;- data.frame(year=character(),
-                   period=character(),
-                   periodName=character(),
-                   value=character(),
-                   stringsAsFactors=FALSE)
-  
-  i &lt;- 0
-  for(d in data){
-    i &lt;- i + 1
-    df[i,] &lt;- unlist(d)
-  }
-  return(df)
-}
-
-unemployed.df &lt;- apiDF(json$Results$series[[1]]$data)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kZXggPC0gd2l0aCh1bmVtcCwgb3JkZXIoeWVhciwgcGVyaW9kKSlcbnVuZW1wID0gdW5lbXBbaW5kZXgsIF1cbmBgYCJ9 -->
+<pre class="r"><code>index &lt;- with(unemp, order(year, period))
+unemp = unemp[index, ]</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVuZW1wbG95bWVudCBSYXRlcyBWaWEgQkxTIEFQSSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCkZpcnN0LCBpbnN0YWxsIHRoZSBCTFMgQVBJIGxpYnJhcnksIGlmIG5lZWRlZC4NCmBgYHtyIGluc3RhbGxfYmxzYXBpfQ0KaW5zdGFsbC5wYWNrYWdlcygnYmxzQVBJJykNCmBgYA0KDQpgYGB7ciBwYWNrYWdlc30NCmxpYnJhcnkoZGV2dG9vbHMpDQpsaWJyYXJ5KGJsc0FQSSkNCmxpYnJhcnkocmpzb24pDQpzZXR3ZCgiQzovVXNlcnMvdGltbWEvRG9jdW1lbnRzL0dpdEh1Yi9GSU42NTcyRmFsbDIwMjAvR3JvdXAxLyIpDQpgYGANCg0KU2VlIGV4YW1wbGUgMiBhdCA8aHR0cHM6Ly9naXRodWIuY29tL21pa2Vhc2lsdmEvYmxzQVBJPiBhbmQgYWRhcHQgY29kZS4NCg0KUHVsbCB0aGUgZGF0YSB2aWEgdGhlIEFQSToNCmBgYHtyIGltcG9ydH0NCnVuZW1wID0gZGF0YS5mcmFtZSgpDQpzdGFydHllYXIgPSAxOTQ4DQplbmR5ZWFyID0gMTk1Nw0KbnJlcSA9IGNlaWxpbmcoKDIwMjAtMTk0OCkvMTApDQpmb3IgKGkgaW4gMTpucmVxKXsNCiAgaWYoZW5keWVhciA+IDIwMjApew0KICAgIGVuZHllYXIgPSAyMDIwDQogIH0NCiAgcGF5bG9hZCA8LSBsaXN0KA0KICAnc2VyaWVzaWQnPWMoJ0xOUzE0MDAwMDAwJyksDQogICdzdGFydHllYXInPXN0YXJ0eWVhciwNCiAgJ2VuZHllYXInPWVuZHllYXIsDQogICdyZWdpc3RyYXRpb25rZXknPSI5NzhiM2M4ZThhMmU0NWRmYWQwMmUxMzc1NWZkZDE2ZiIpDQogIHJlc3BvbnNlIDwtIGJsc0FQSShwYXlsb2FkLCAyKQ0KICBqc29uIDwtIGZyb21KU09OKHJlc3BvbnNlKQ0KICBhcGlERiA8LSBmdW5jdGlvbihkYXRhKXsNCiAgICBkZiA8LSBkYXRhLmZyYW1lKHllYXI9Y2hhcmFjdGVyKCksDQogICAgICAgICAgICAgICAgICAgICBwZXJpb2Q9Y2hhcmFjdGVyKCksDQogICAgICAgICAgICAgICAgICAgICBwZXJpb2ROYW1lPWNoYXJhY3RlcigpLA0KICAgICAgICAgICAgICAgICAgICAgdmFsdWU9Y2hhcmFjdGVyKCksDQogICAgICAgICAgICAgICAgICAgICBzdHJpbmdzQXNGYWN0b3JzPUZBTFNFKQ0KICAgIGkgPC0gMA0KICAgIGZvcihkIGluIGRhdGEpew0KICAgICAgaSA8LSBpICsgMQ0KICAgICAgZGZbaSxdIDwtIHVubGlzdChkKQ0KICAgIH0NCiAgICByZXR1cm4oZGYpDQogIH0NCiAgdW5lbXBwYXJ0IDwtIGFwaURGKGpzb24kUmVzdWx0cyRzZXJpZXNbWzFdXSRkYXRhKQ0KICB1bmVtcCA9IHJiaW5kKHVuZW1wLHVuZW1wcGFydCkNCiAgc3RhcnR5ZWFyPXN0YXJ0eWVhcisxMA0KICBlbmR5ZWFyPWVuZHllYXIrMTANCn0NCmluZGV4IDwtIHdpdGgodW5lbXAsIG9yZGVyKHllYXIsIHBlcmlvZCkpDQp1bmVtcDIgPSB1bmVtcFtpbmRleCwgXQ0KYGBgDQoNClByb2Nlc3MgcmVzdWx0cyBpbnRvIGRhdGEgZnJhbWU6DQpgYGB7ciBjbGVhbn0NCiMjIFByb2Nlc3MgcmVzdWx0cw0KDQoNCnVuZW1wbG95ZWQuZGYgPC0gYXBpREYoanNvbiRSZXN1bHRzJHNlcmllc1tbMV1dJGRhdGEpDQpgYGANCg0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVuZW1wbG95bWVudCBSYXRlcyBWaWEgQkxTIEFQSSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCkZpcnN0LCBpbnN0YWxsIHRoZSBCTFMgQVBJIGxpYnJhcnksIGlmIG5lZWRlZC4NCmBgYHtyIGluc3RhbGxfYmxzYXBpfQ0KaW5zdGFsbC5wYWNrYWdlcygnYmxzQVBJJykNCmBgYA0KDQpgYGB7ciBwYWNrYWdlc30NCmxpYnJhcnkoZGV2dG9vbHMpDQpsaWJyYXJ5KGJsc0FQSSkNCmxpYnJhcnkocmpzb24pDQpzZXR3ZCgiQzovVXNlcnMvdGltbWEvRG9jdW1lbnRzL0dpdEh1Yi9GSU42NTcyRmFsbDIwMjAvR3JvdXAxLyIpDQpgYGANCg0KU2VlIGV4YW1wbGUgMiBhdCA8aHR0cHM6Ly9naXRodWIuY29tL21pa2Vhc2lsdmEvYmxzQVBJPiBhbmQgYWRhcHQgY29kZS4NCg0KTm90ZTogQ3JlYXRlIHlvdXIgb3duIEFQSSBrZXkgYXQgPGh0dHBzOi8vZGF0YS5ibHMuZ292L3JlZ2lzdHJhdGlvbkVuZ2luZS8+IGFuZCBpbnNlcnQgdGhlIGtleSB0aGV5IGVtYWlsIHlvdSBhcyB0aGUgcmVnaXN0cmF0aW9uIGtleSBwYXJhbWV0ZXIuDQoNClB1bGwgdGhlIGRhdGEgdmlhIHRoZSBBUEk6IA0KYGBge3IgaW1wb3J0fQ0KdW5lbXAgPSBkYXRhLmZyYW1lKCkNCnN0YXJ0eWVhciA9IDE5NDgNCmVuZHllYXIgPSAxOTU3DQpucmVxID0gY2VpbGluZygoMjAyMC0xOTQ4KS8xMCkNCmZvciAoaSBpbiAxOm5yZXEpew0KICBpZihlbmR5ZWFyID4gMjAyMCl7DQogICAgZW5keWVhciA9IDIwMjANCiAgfQ0KICBwYXlsb2FkIDwtIGxpc3QoDQogICdzZXJpZXNpZCc9YygnTE5TMTQwMDAwMDAnKSwNCiAgJ3N0YXJ0eWVhcic9c3RhcnR5ZWFyLA0KICAnZW5keWVhcic9ZW5keWVhciwNCiAgJ3JlZ2lzdHJhdGlvbmtleSc9Ijk3OGIzYzhlOGEyZTQ1ZGZhZDAyZTEzNzU1ZmRkMTZmIikNCiAgcmVzcG9uc2UgPC0gYmxzQVBJKHBheWxvYWQsIDIpDQogIGpzb24gPC0gZnJvbUpTT04ocmVzcG9uc2UpDQogIGFwaURGIDwtIGZ1bmN0aW9uKGRhdGEpew0KICAgIGRmIDwtIGRhdGEuZnJhbWUoeWVhcj1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHBlcmlvZD1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHBlcmlvZE5hbWU9Y2hhcmFjdGVyKCksDQogICAgICAgICAgICAgICAgICAgICB2YWx1ZT1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHN0cmluZ3NBc0ZhY3RvcnM9RkFMU0UpDQogICAgaSA8LSAwDQogICAgZm9yKGQgaW4gZGF0YSl7DQogICAgICBpIDwtIGkgKyAxDQogICAgICBkZltpLF0gPC0gdW5saXN0KGQpDQogICAgfQ0KICAgIHJldHVybihkZikNCiAgfQ0KICB1bmVtcHBhcnQgPC0gYXBpREYoanNvbiRSZXN1bHRzJHNlcmllc1tbMV1dJGRhdGEpDQogIHVuZW1wID0gcmJpbmQodW5lbXAsdW5lbXBwYXJ0KQ0KICBzdGFydHllYXI9c3RhcnR5ZWFyKzEwDQogIGVuZHllYXI9ZW5keWVhcisxMA0KfQ0KaW5kZXggPC0gd2l0aCh1bmVtcCwgb3JkZXIoeWVhciwgcGVyaW9kKSkNCnVuZW1wID0gdW5lbXBbaW5kZXgsIF0NCmBgYA0KDQoNCg==</div>
 
 
 
