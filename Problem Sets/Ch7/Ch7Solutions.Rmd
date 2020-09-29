@@ -159,7 +159,7 @@ ggplot(myData,aes(y=Rent,x=Sqft))+geom_point()+geom_smooth(method="lm")
 ```
 
 Model 2: Exponential Model ($\ln(y) = X\beta+\epsilon$)
-```{r 7.6a1}
+```{r 7.6a2}
 Model2 <- lm(log(Rent) ~ Beds+Baths+Sqft, data = myData)
 summary(Model2)
 ```
@@ -199,24 +199,96 @@ summary(Model1)
 
 Model 2: Logarithmic Regression ($y=\ln(X)*\beta+\epsilon$)
 ```{r 7.7b}
-Model <- lm(TimePerUnit ~ log(UnitNumber), data = myData)
-summary(Model)
+Model2 <- lm(TimePerUnit ~ log(UnitNumber), data = myData)
+summary(Model2)
+```
+
+Plug in unit 50 to the logarithmic model:
+```{r 7.7c}
+u = 50
+t = Model2$coefficients[1] + Model2$coefficients[2]*log(u)
+t
 ```
 
 
+### 7.8
+
+```{r 7.8data}
+myData = read_xlsx("Ch7_Q37_Data_File.xlsx")
+```
 
 
+```{r 7.8a}
+Model1 <- lm(log(Q) ~ log(L)+log(K), data = myData)
+summary(Model1)
+```
 
 
+### 7.9
+
+```{r 7.9data}
+myData = read_xlsx("Ch7_Q43_Data_File.xlsx")
+```
+
+```{r 7.9a1}
+Linear_Model <-lm(y ~ x1+x2, data =myData)
+summary(Linear_Model)
+```
+
+```{r 7.9a2}
+x1 = 12
+x2 = 8
+Linear_Model$coefficients[1]+Linear_Model$coefficients[2]*x1+Linear_Model$coefficients[3]*x2
+```
 
 
+Logistic regression model (aka logit) is designed to fit binary choice variables (dichotomous).
+```{r 7.9b1}
+Logistic_Model <- glm(y ~ x1 + x2, family = binomial(link = logit), data = myData)
+summary(Logistic_Model)
+
+newdat <- data.frame(x1=seq(min(myData$x1), max(myData$x1),len=100))
+newdat$x2 = mean(myData$x2)
+newdat$y = predict(Logistic_Model, newdata=newdat, type="response")
+plot(y~x1, data=myData, col="red4")
+lines(y ~ x1, newdat, col="green4", lwd=2)
+```
+
+Logistic fitted values:
+
+$\hat{y} = \dfrac{e^{\beta_0+\beta_1x_1+\beta_2x_2}}{1+e^{\beta_0+\beta_1x_1+\beta_2x_2}}$
+```{r 7.9b2}
+x1 = 12
+x2 = 8
+(exp(Logistic_Model$coefficients[1]+Logistic_Model$coefficients[2]*x1+Logistic_Model$coefficients[3]*x2))/(1+exp(Logistic_Model$coefficients[1]+Logistic_Model$coefficients[2]*x1+Logistic_Model$coefficients[3]*x2))
+```
 
 
+### 7.10
+
+```{r 7.10data}
+myData = read_xlsx("Ch7_Q56_Data_File.xlsx")
+```
+
+First, partition the dataset into training (first 30 obs) and testing sets (last 10 obs). Then fit model to training set.
+```{r 7.10a1}
+TData <- myData[1:30,]
+VData <- myData[31:40,]
+Model1 <- lm(y ~ x + d, data = TData)
+summary(Model1)
+Model2 <- lm(y ~ x + d + x*d, data = TData)
+summary(Model2)
+```
 
 
-
-
-
+```{r 7.10a2}
+Pred1 <- predict(Model1, VData)
+RMSE1 = sqrt(mean((VData$y-Pred1)^2))
+Pred2 <- predict(Model2, VData)
+RMSE2 = sqrt(mean((VData$y-Pred2)^2))
+RMSE1
+RMSE2
+```
 
 
 
