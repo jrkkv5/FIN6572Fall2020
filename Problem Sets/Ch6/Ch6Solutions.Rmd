@@ -21,6 +21,13 @@ Model = lm(Price ~ Sqft + Beds + Baths + Colonial, data = myData)
 summary(Model)
 ```
 
+```{r 6.3b}
+sqft=2500
+colonial=1
+bed=3
+bath=2
+Model$coefficients[1] + Model$coefficients[2]*sqft + Model$coefficients[3]*bed + Model$coefficients[4]*bath + Model$coefficients[5]*colonial
+```
 
 ### 6.4
 
@@ -79,13 +86,17 @@ myData = read_xlsx("Ch6_Q47_Data_File.xlsx")
 
 a.
 ```{r 6.8a}
-Model = lm(y ~ x + d1 + d2 + d3, data = myData)
+myData$x2 = myData$x/1000
+Model = lm(y ~ x2 + d1 + d2 + d3, data = myData)
 summary(Model)
 ```
 
+b. 
+
+
 d.
 ```{r 6.8d}
-Model2 <- lm(y ~ x + d2 + d3 + d4, data = myData)
+Model2 <- lm(y ~ x2 + d2 + d3 + d4, data = myData)
 summary(Model2)
 ```
 
