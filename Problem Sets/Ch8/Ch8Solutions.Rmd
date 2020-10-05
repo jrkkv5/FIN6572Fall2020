@@ -6,11 +6,38 @@ output: html_notebook
 ```{r packages}
 library(ggplot2)
 library(readxl)
-setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch8")
 ```
 
 ### 8.1
 
 ```{r 8.1data}
 myData = read_xlsx("Ch8_Q1_Data_File.xlsx")
+```
+
+```{r 8.1a}
+sqrt((myData$x1[1]-myData$x1[2])^2 + (myData$x2[1]-myData$x2[2])^2)
+```
+
+```{r 8.1b}
+abs(myData$x1[1]-myData$x1[2]) + abs(myData$x2[1]-myData$x2[2])
+```
+
+```{r 8.1c}
+x1mu = mean(myData$x1)
+x2mu = mean(myData$x2)
+x1std = sd(myData$x1)
+x2std = sd(myData$x2)
+myData$x1std = (myData$x1-x1mu)/x1std
+myData$x2std = (myData$x2-x2mu)/x2std
+sqrt((myData$x1std[1]-myData$x1std[2])^2 + (myData$x2std[1]-myData$x2std[2])^2)
+```
+
+```{r 8.1d}
+x1min = min(myData$x1)
+x2min = min(myData$x2)
+x1range = max(myData$x1)-x1min
+x2range = max(myData$x2)-x2min
+myData$x1mm = (myData$x1-x1min)/x1range
+myData$x2mm = (myData$x2-x2min)/x2range
+sqrt((myData$x1mm[1]-myData$x1mm[2])^2 + (myData$x2mm[1]-myData$x2mm[2])^2)
 ```
