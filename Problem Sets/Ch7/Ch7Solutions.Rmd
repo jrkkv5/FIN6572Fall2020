@@ -1,6 +1,8 @@
 ---
 title: "Chapter 7 Problem Set Solutions"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r packages}

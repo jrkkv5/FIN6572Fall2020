@@ -1,0 +1,16 @@
+---
+title: "Chapter 8 Problem Set Solutions"
+output: html_notebook
+---
+
+```{r packages}
+library(ggplot2)
+library(readxl)
+setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch8")
+```
+
+### 8.1
+
+```{r 8.1data}
+myData = read_xlsx("Ch8_Q1_Data_File.xlsx")
+```
