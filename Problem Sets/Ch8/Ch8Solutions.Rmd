@@ -6,6 +6,7 @@ output: html_notebook
 ```{r packages}
 library(ggplot2)
 library(readxl)
+setwd("C:/Users/tdrgv/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch8")
 ```
 
 ### 8.1
@@ -14,14 +15,17 @@ library(readxl)
 myData = read_xlsx("Ch8_Q1_Data_File.xlsx")
 ```
 
+Calculate Euclidean distance between first two observations:
 ```{r 8.1a}
 sqrt((myData$x1[1]-myData$x1[2])^2 + (myData$x2[1]-myData$x2[2])^2)
 ```
 
+Calculate Manhattan distance between first two observations:
 ```{r 8.1b}
 abs(myData$x1[1]-myData$x1[2]) + abs(myData$x2[1]-myData$x2[2])
 ```
 
+Standardize x1 and x2, and then recalculate Euclidean distance:
 ```{r 8.1c}
 x1mu = mean(myData$x1)
 x2mu = mean(myData$x2)
@@ -32,6 +36,7 @@ myData$x2std = (myData$x2-x2mu)/x2std
 sqrt((myData$x1std[1]-myData$x1std[2])^2 + (myData$x2std[1]-myData$x2std[2])^2)
 ```
 
+Min-max normalize x1 and x2, and then recalculate Euclidean distance:
 ```{r 8.1d}
 x1min = min(myData$x1)
 x2min = min(myData$x2)
@@ -41,3 +46,201 @@ myData$x1mm = (myData$x1-x1min)/x1range
 myData$x2mm = (myData$x2-x2min)/x2range
 sqrt((myData$x1mm[1]-myData$x1mm[2])^2 + (myData$x2mm[1]-myData$x2mm[2])^2)
 ```
+
+
+### 8.2
+
+```{r 8.2data}
+rm("myData")
+myData = read_xlsx("Ch8_Q13_Data_File.xlsx")
+```
+
+Calculate matching coefficients for all pairwise combos for rows 1-5:
+```{r 8.2a}
+mean(myData[1,]==myData[2,])
+mean(myData[1,]==myData[3,])
+mean(myData[1,]==myData[4,])
+mean(myData[1,]==myData[5,])
+mean(myData[2,]==myData[3,])
+mean(myData[2,]==myData[4,])
+mean(myData[2,]==myData[5,])
+mean(myData[3,]==myData[4,])
+mean(myData[3,]==myData[5,])
+mean(myData[4,]==myData[5,])
+```
+
+
+### 8.3
+
+See <https://en.wikipedia.org/wiki/Confusion_matrix> for a nice breakdown of the confusion matrix and the various calculations that can be derived from it.
+
+8.3a: Missclassification Rate $= \dfrac{FP+FN}{TP+TN+FP+FN}$ or $\dfrac{Incorrect Predictions}{Total Number Of Observations}$
+
+```{r 8.3a}
+(87+10)/(254+649+87+10)
+```
+
+8.3b: Accuracy $= \dfrac{TP+TN}{TP+TN+FP+FN}$ or $\dfrac{Correct Predictions}{Total Number Of Observations}$
+```{r 8.3b}
+(254+649)/(254+649+87+10)
+```
+
+8.3c: Sensitivity $= \dfrac{TP}{TP+FN}$ or $\dfrac{Correct True Predictions}{Total Number Of True Observations}$
+```{r 8.3c}
+(254)/(254+10)
+```
+
+8.3d: Precision $= \dfrac{TP}{TP+FP}$ or $\dfrac{Correct True Predictions}{Total Number Of True Predictions}$
+```{r 8.3d}
+(254)/(254+87)
+```
+
+8.3e: Specificity $= \dfrac{TN}{TN+FP}$ or $\dfrac{Correct False Predictions}{Total Number Of False  Observations}$
+```{r 8.3e}
+(649)/(649+87)
+```
+
+
+
+### 8.4
+
+```{r 8.4data}
+rm("myData")
+myData = read_xlsx("Ch8_Q23_Data_File.xlsx")
+```
+
+Make predictions for cutoff of 0.5 and classify into confusion matrix labels:
+```{r 8.4a1}
+myData$Prediction = myData$`Class 1 Probability` > 0.5
+myData$TP = myData$`Actual Class`==1 & myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 & myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 & myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 & myData$Prediction==0
+```
+
+Misclassification Rate: (Note: != is the R operator for "not equal")
+```{r 8.4a2}
+(sum(myData$FP)+sum(myData$FN))/nrow(myData)
+```
+
+Accuracy Rate: (either directly calculate or just do $1-$Misclassification Rate)
+```{r 8.4a3}
+(sum(myData$TP)+sum(myData$TN))/nrow(myData)
+1-(sum(myData$FP)+sum(myData$FN))/nrow(myData)
+```
+
+Sensitivity:
+```{r 8.4a4}
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))
+```
+
+Precision:
+```{r 8.4a5}
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))
+```
+
+Specificity:
+```{r 8.4a6}
+sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))
+```
+
+Repeat for cutoff=0.25
+```{r 8.4b}
+myData$Prediction = myData$`Class 1 Probability` > 0.25
+myData$TP = myData$`Actual Class`==1 & myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 & myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 & myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 & myData$Prediction==0
+(sum(myData$FP)+sum(myData$FN))/nrow(myData)
+(sum(myData$TP)+sum(myData$TN))/nrow(myData)
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))
+sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))
+```
+
+Repeat for cutoff=0.75
+```{r 8.4c}
+myData$Prediction = myData$`Class 1 Probability` > 0.75
+myData$TP = myData$`Actual Class`==1 & myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 & myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 & myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 & myData$Prediction==0
+(sum(myData$FP)+sum(myData$FN))/nrow(myData)
+(sum(myData$TP)+sum(myData$TN))/nrow(myData)
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))
+sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))
+```
+
+
+### 8.5
+
+```{r 8.5data}
+rm("myData")
+myData = read_xlsx("Ch8_Q27_Data_File.xlsx")
+```
+
+RMSE = Root Mean Squared Error $= \sqrt{\dfrac{\sum e_i^2}{n}}$
+```{r 8.5a}
+myData$e = myData$`Actual Value` - myData$`Predicted Value`
+myData$esq = myData$e^2
+sqrt(sum(myData$esq)/nrow(myData))
+```
+
+ME = Mean Error $= \dfrac{\sum e_i}{n}$
+```{r 8.5b}
+sum(myData$e)/nrow(myData)
+```
+
+MAD = Mean Absolute Deviation $= \dfrac{\sum |e_i|}{n}$
+```{r 8.5c}
+sum(abs(myData$e))/nrow(myData)
+```
+
+MPE = Mean Percentage Error $= \left(\dfrac{1}{n}\sum \dfrac{e_i}{y_i}\right)(100\%)$
+```{r 8.5d}
+myData$edivy = myData$e/myData$`Actual Value`
+sum(myData$edivy)/nrow(myData)*100
+```
+
+MAPE = Mean Absolute Percentage Error $= \left(\dfrac{1}{n}\sum \left|\dfrac{e_i}{y_i}\right|\right)(100\%)$
+```{r 8.5e}
+myData$edivy = myData$e/myData$`Actual Value`
+sum(abs(myData$edivy))/nrow(myData)*100
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

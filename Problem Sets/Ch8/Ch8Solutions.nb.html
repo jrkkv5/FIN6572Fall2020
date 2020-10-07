@@ -1760,9 +1760,10 @@ summary {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShyZWFkeGwpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShyZWFkeGwpXG5zZXR3ZChcIkM6L1VzZXJzL3Rkcmd2L0RvY3VtZW50cy9HaXRIdWIvRklONjU3MkZhbGwyMDIwL1Byb2JsZW0gU2V0cy9DaDhcIilcbmBgYCJ9 -->
 <pre class="r"><code>library(ggplot2)
-library(readxl)</code></pre>
+library(readxl)
+setwd(&quot;C:/Users/tdrgv/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch8&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1775,6 +1776,7 @@ library(readxl)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Calculate Euclidean distance between first two observations:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3FydCgobXlEYXRhJHgxWzFdLW15RGF0YSR4MVsyXSleMiArIChteURhdGEkeDJbMV0tbXlEYXRhJHgyWzJdKV4yKVxuYGBgIn0= -->
@@ -1785,6 +1787,7 @@ library(readxl)</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Calculate Manhattan distance between first two observations:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYWJzKG15RGF0YSR4MVsxXS1teURhdGEkeDFbMl0pICsgYWJzKG15RGF0YSR4MlsxXS1teURhdGEkeDJbMl0pXG5gYGAifQ== -->
@@ -1795,6 +1798,7 @@ library(readxl)</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Standardize x1 and x2, and then recalculate Euclidean distance:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueDFtdSA9IG1lYW4obXlEYXRhJHgxKVxueDJtdSA9IG1lYW4obXlEYXRhJHgyKVxueDFzdGQgPSBzZChteURhdGEkeDEpXG54MnN0ZCA9IHNkKG15RGF0YSR4Milcbm15RGF0YSR4MXN0ZCA9IChteURhdGEkeDEteDFtdSkveDFzdGRcbm15RGF0YSR4MnN0ZCA9IChteURhdGEkeDIteDJtdSkveDJzdGRcbnNxcnQoKG15RGF0YSR4MXN0ZFsxXS1teURhdGEkeDFzdGRbMl0pXjIgKyAobXlEYXRhJHgyc3RkWzFdLW15RGF0YSR4MnN0ZFsyXSleMilcbmBgYCJ9 -->
@@ -1811,6 +1815,7 @@ sqrt((myData$x1std[1]-myData$x1std[2])^2 + (myData$x2std[1]-myData$x2std[2])^2)<
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Min-max normalize x1 and x2, and then recalculate Euclidean distance:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxueDFtaW4gPSBtaW4obXlEYXRhJHgxKVxueDJtaW4gPSBtaW4obXlEYXRhJHgyKVxueDFyYW5nZSA9IG1heChteURhdGEkeDEpLXgxbWluXG54MnJhbmdlID0gbWF4KG15RGF0YSR4MikteDJtaW5cbm15RGF0YSR4MW1tID0gKG15RGF0YSR4MS14MW1pbikveDFyYW5nZVxubXlEYXRhJHgybW0gPSAobXlEYXRhJHgyLXgybWluKS94MnJhbmdlXG5zcXJ0KChteURhdGEkeDFtbVsxXS1teURhdGEkeDFtbVsyXSleMiArIChteURhdGEkeDJtbVsxXS1teURhdGEkeDJtbVsyXSleMilcbmBgYCJ9 -->
@@ -1826,9 +1831,380 @@ sqrt((myData$x1mm[1]-myData$x1mm[2])^2 + (myData$x2mm[1]-myData$x2mm[2])^2)</cod
 <pre><code>[1] 0.8884656</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="section-1" class="section level3">
+<h3>8.2</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm0oXCJteURhdGFcIilcbm15RGF0YSA9IHJlYWRfeGxzeChcIkNoOF9RMTNfRGF0YV9GaWxlLnhsc3hcIilcbmBgYCJ9 -->
+<pre class="r"><code>rm(&quot;myData&quot;)
+myData = read_xlsx(&quot;Ch8_Q13_Data_File.xlsx&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Calculate matching coefficients for all pairwise combos for rows 1-5:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMSxdPT1teURhdGFbMixdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[1,]==myData[2,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMzMzMzMzM1xuIn0= -->
+<pre><code>[1] 0.3333333</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMSxdPT1teURhdGFbMyxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[1,]==myData[3,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNjY2NjY2N1xuIn0= -->
+<pre><code>[1] 0.6666667</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMSxdPT1teURhdGFbNCxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[1,]==myData[4,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMzMzMzMzM1xuIn0= -->
+<pre><code>[1] 0.3333333</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMSxdPT1teURhdGFbNSxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[1,]==myData[5,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDFcbiJ9 -->
+<pre><code>[1] 1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMixdPT1teURhdGFbMyxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[2,]==myData[3,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDBcbiJ9 -->
+<pre><code>[1] 0</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMixdPT1teURhdGFbNCxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[2,]==myData[4,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDFcbiJ9 -->
+<pre><code>[1] 1</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMixdPT1teURhdGFbNSxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[2,]==myData[5,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMzMzMzMzM1xuIn0= -->
+<pre><code>[1] 0.3333333</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMyxdPT1teURhdGFbNCxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[3,]==myData[4,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDBcbiJ9 -->
+<pre><code>[1] 0</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbMyxdPT1teURhdGFbNSxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[3,]==myData[5,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNjY2NjY2N1xuIn0= -->
+<pre><code>[1] 0.6666667</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihteURhdGFbNCxdPT1teURhdGFbNSxdKVxuYGBgIn0= -->
+<pre class="r"><code>mean(myData[4,]==myData[5,])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMzMzMzMzM1xuIn0= -->
+<pre><code>[1] 0.3333333</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="section-2" class="section level3">
+<h3>8.3</h3>
+<p>See <a href="https://en.wikipedia.org/wiki/Confusion_matrix" class="uri">https://en.wikipedia.org/wiki/Confusion_matrix</a> for a nice breakdown of the confusion matrix and the various calculations that can be derived from it.</p>
+<p>8.3a: Missclassification Rate <span class="math inline">\(= \dfrac{FP+FN}{TP+TN+FP+FN}\)</span> or <span class="math inline">\(\dfrac{Incorrect Predictions}{Total Number Of Observations}\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKDg3KzEwKS8oMjU0KzY0OSs4NysxMClcbmBgYCJ9 -->
+<pre class="r"><code>(87+10)/(254+649+87+10)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMDk3XG4ifQ== -->
+<pre><code>[1] 0.097</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>8.3b: Accuracy <span class="math inline">\(= \dfrac{TP+TN}{TP+TN+FP+FN}\)</span> or <span class="math inline">\(\dfrac{Correct Predictions}{Total Number Of Observations}\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKDI1NCs2NDkpLygyNTQrNjQ5Kzg3KzEwKVxuYGBgIn0= -->
+<pre class="r"><code>(254+649)/(254+649+87+10)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuOTAzXG4ifQ== -->
+<pre><code>[1] 0.903</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>8.3c: Sensitivity <span class="math inline">\(= \dfrac{TP}{TP+FN}\)</span> or <span class="math inline">\(\dfrac{Correct True Predictions}{Total Number Of True Observations}\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKDI1NCkvKDI1NCsxMClcbmBgYCJ9 -->
+<pre class="r"><code>(254)/(254+10)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuOTYyMTIxMlxuIn0= -->
+<pre><code>[1] 0.9621212</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>8.3d: Precision <span class="math inline">\(= \dfrac{TP}{TP+FP}\)</span> or <span class="math inline">\(\dfrac{Correct True Predictions}{Total Number Of True Predictions}\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKDI1NCkvKDI1NCs4NylcbmBgYCJ9 -->
+<pre class="r"><code>(254)/(254+87)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNzQ0ODY4XG4ifQ== -->
+<pre><code>[1] 0.744868</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>8.3e: Specificity <span class="math inline">\(= \dfrac{TN}{TN+FP}\)</span> or <span class="math inline">\(\dfrac{Correct False Predictions}{Total Number Of False Observations}\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKDY0OSkvKDY0OSs4NylcbmBgYCJ9 -->
+<pre class="r"><code>(649)/(649+87)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuODgxNzkzNVxuIn0= -->
+<pre><code>[1] 0.8817935</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="section-3" class="section level3">
+<h3>8.4</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm0oXCJteURhdGFcIilcbm15RGF0YSA9IHJlYWRfeGxzeChcIkNoOF9RMjNfRGF0YV9GaWxlLnhsc3hcIilcbmBgYCJ9 -->
+<pre class="r"><code>rm(&quot;myData&quot;)
+myData = read_xlsx(&quot;Ch8_Q23_Data_File.xlsx&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Make predictions for cutoff of 0.5 and classify into confusion matrix labels:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlEYXRhJFByZWRpY3Rpb24gPSBteURhdGEkYENsYXNzIDEgUHJvYmFiaWxpdHlgID4gMC41XG5teURhdGEkVFAgPSBteURhdGEkYEFjdHVhbCBDbGFzc2A9PTEgJiBteURhdGEkUHJlZGljdGlvbj09MVxubXlEYXRhJFROID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0wICYgbXlEYXRhJFByZWRpY3Rpb249PTBcbm15RGF0YSRGUCA9IG15RGF0YSRgQWN0dWFsIENsYXNzYD09MCAmIG15RGF0YSRQcmVkaWN0aW9uPT0xXG5teURhdGEkRk4gPSBteURhdGEkYEFjdHVhbCBDbGFzc2A9PTEgJiBteURhdGEkUHJlZGljdGlvbj09MFxuYGBgIn0= -->
+<pre class="r"><code>myData$Prediction = myData$`Class 1 Probability` &gt; 0.5
+myData$TP = myData$`Actual Class`==1 &amp; myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 &amp; myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 &amp; myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 &amp; myData$Prediction==0</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Misclassification Rate: (Note: != is the R operator for “not equal”)</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKHN1bShteURhdGEkRlApK3N1bShteURhdGEkRk4pKS9ucm93KG15RGF0YSlcbmBgYCJ9 -->
+<pre class="r"><code>(sum(myData$FP)+sum(myData$FN))/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNlxuIn0= -->
+<pre><code>[1] 0.6</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Accuracy Rate: (either directly calculate or just do <span class="math inline">\(1-\)</span>Misclassification Rate)</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKHN1bShteURhdGEkVFApK3N1bShteURhdGEkVE4pKS9ucm93KG15RGF0YSlcbmBgYCJ9 -->
+<pre class="r"><code>(sum(myData$TP)+sum(myData$TN))/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNFxuIn0= -->
+<pre><code>[1] 0.4</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuMS0oc3VtKG15RGF0YSRGUCkrc3VtKG15RGF0YSRGTikpL25yb3cobXlEYXRhKVxuYGBgIn0= -->
+<pre class="r"><code>1-(sum(myData$FP)+sum(myData$FN))/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNFxuIn0= -->
+<pre><code>[1] 0.4</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Sensitivity:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRk4pKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNDI4NTcxNFxuIn0= -->
+<pre><code>[1] 0.4285714</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Precision:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRlApKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNlxuIn0= -->
+<pre><code>[1] 0.6</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Specificity:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUTikvKHN1bShteURhdGEkVE4pK3N1bShteURhdGEkRlApKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMzMzMzMzM1xuIn0= -->
+<pre><code>[1] 0.3333333</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Repeat for cutoff=0.25</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlEYXRhJFByZWRpY3Rpb24gPSBteURhdGEkYENsYXNzIDEgUHJvYmFiaWxpdHlgID4gMC4yNVxubXlEYXRhJFRQID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0xICYgbXlEYXRhJFByZWRpY3Rpb249PTFcbm15RGF0YSRUTiA9IG15RGF0YSRgQWN0dWFsIENsYXNzYD09MCAmIG15RGF0YSRQcmVkaWN0aW9uPT0wXG5teURhdGEkRlAgPSBteURhdGEkYEFjdHVhbCBDbGFzc2A9PTAgJiBteURhdGEkUHJlZGljdGlvbj09MVxubXlEYXRhJEZOID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0xICYgbXlEYXRhJFByZWRpY3Rpb249PTBcbihzdW0obXlEYXRhJEZQKStzdW0obXlEYXRhJEZOKSkvbnJvdyhteURhdGEpXG5gYGAifQ== -->
+<pre class="r"><code>myData$Prediction = myData$`Class 1 Probability` &gt; 0.25
+myData$TP = myData$`Actual Class`==1 &amp; myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 &amp; myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 &amp; myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 &amp; myData$Prediction==0
+(sum(myData$FP)+sum(myData$FN))/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNFxuIn0= -->
+<pre><code>[1] 0.4</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKHN1bShteURhdGEkVFApK3N1bShteURhdGEkVE4pKS9ucm93KG15RGF0YSlcbmBgYCJ9 -->
+<pre class="r"><code>(sum(myData$TP)+sum(myData$TN))/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNlxuIn0= -->
+<pre><code>[1] 0.6</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRk4pKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNzE0Mjg1N1xuIn0= -->
+<pre><code>[1] 0.7142857</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRlApKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNzE0Mjg1N1xuIn0= -->
+<pre><code>[1] 0.7142857</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUTikvKHN1bShteURhdGEkVE4pK3N1bShteURhdGEkRlApKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMzMzMzMzM1xuIn0= -->
+<pre><code>[1] 0.3333333</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Repeat for cutoff=0.75</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlEYXRhJFByZWRpY3Rpb24gPSBteURhdGEkYENsYXNzIDEgUHJvYmFiaWxpdHlgID4gMC43NVxubXlEYXRhJFRQID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0xICYgbXlEYXRhJFByZWRpY3Rpb249PTFcbm15RGF0YSRUTiA9IG15RGF0YSRgQWN0dWFsIENsYXNzYD09MCAmIG15RGF0YSRQcmVkaWN0aW9uPT0wXG5teURhdGEkRlAgPSBteURhdGEkYEFjdHVhbCBDbGFzc2A9PTAgJiBteURhdGEkUHJlZGljdGlvbj09MVxubXlEYXRhJEZOID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0xICYgbXlEYXRhJFByZWRpY3Rpb249PTBcbihzdW0obXlEYXRhJEZQKStzdW0obXlEYXRhJEZOKSkvbnJvdyhteURhdGEpXG5gYGAifQ== -->
+<pre class="r"><code>myData$Prediction = myData$`Class 1 Probability` &gt; 0.75
+myData$TP = myData$`Actual Class`==1 &amp; myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 &amp; myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 &amp; myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 &amp; myData$Prediction==0
+(sum(myData$FP)+sum(myData$FN))/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuN1xuIn0= -->
+<pre><code>[1] 0.7</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuKHN1bShteURhdGEkVFApK3N1bShteURhdGEkVE4pKS9ucm93KG15RGF0YSlcbmBgYCJ9 -->
+<pre class="r"><code>(sum(myData$TP)+sum(myData$TN))/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuM1xuIn0= -->
+<pre><code>[1] 0.3</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRk4pKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMjg1NzE0M1xuIn0= -->
+<pre><code>[1] 0.2857143</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRlApKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuNVxuIn0= -->
+<pre><code>[1] 0.5</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRUTikvKHN1bShteURhdGEkVE4pK3N1bShteURhdGEkRlApKVxuYGBgIn0= -->
+<pre class="r"><code>sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDAuMzMzMzMzM1xuIn0= -->
+<pre><code>[1] 0.3333333</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="section-4" class="section level3">
+<h3>8.5</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm0oXCJteURhdGFcIilcbm15RGF0YSA9IHJlYWRfeGxzeChcIkNoOF9RMjdfRGF0YV9GaWxlLnhsc3hcIilcbmBgYCJ9 -->
+<pre class="r"><code>rm(&quot;myData&quot;)
+myData = read_xlsx(&quot;Ch8_Q27_Data_File.xlsx&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>RMSE = Root Mean Squared Error <span class="math inline">\(= \sqrt{\dfrac{\sum e_i^2}{n}}\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlEYXRhJGUgPSBteURhdGEkYEFjdHVhbCBWYWx1ZWAgLSBteURhdGEkYFByZWRpY3RlZCBWYWx1ZWBcbm15RGF0YSRlc3EgPSBteURhdGEkZV4yXG5zcXJ0KHN1bShteURhdGEkZXNxKS9ucm93KG15RGF0YSkpXG5gYGAifQ== -->
+<pre class="r"><code>myData$e = myData$`Actual Value` - myData$`Predicted Value`
+myData$esq = myData$e^2
+sqrt(sum(myData$esq)/nrow(myData))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDgwLjEwNzQzXG4ifQ== -->
+<pre><code>[1] 80.10743</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>ME = Mean Error <span class="math inline">\(= \dfrac{\sum e_i}{n}\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKG15RGF0YSRlKS9ucm93KG15RGF0YSlcbmBgYCJ9 -->
+<pre class="r"><code>sum(myData$e)/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIC01MlxuIn0= -->
+<pre><code>[1] -52</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>MAD = Mean Absolute Deviation <span class="math inline">\(= \dfrac{\sum |e_i|}{n}\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtKGFicyhteURhdGEkZSkpL25yb3cobXlEYXRhKVxuYGBgIn0= -->
+<pre class="r"><code>sum(abs(myData$e))/nrow(myData)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDY3LjRcbiJ9 -->
+<pre><code>[1] 67.4</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>MPE = Mean Percentage Error <span class="math inline">\(= \left(\dfrac{1}{n}\sum \dfrac{e_i}{y_i}\right)(100\%)\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlEYXRhJGVkaXZ5ID0gbXlEYXRhJGUvbXlEYXRhJGBBY3R1YWwgVmFsdWVgXG5zdW0obXlEYXRhJGVkaXZ5KS9ucm93KG15RGF0YSkqMTAwXG5gYGAifQ== -->
+<pre class="r"><code>myData$edivy = myData$e/myData$`Actual Value`
+sum(myData$edivy)/nrow(myData)*100</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIC00My4zMzUzM1xuIn0= -->
+<pre><code>[1] -43.33533</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>MAPE = Mean Absolute Percentage Error <span class="math inline">\(= \left(\dfrac{1}{n}\sum \left|\dfrac{e_i}{y_i}\right|\right)(100\%)\)</span></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXlEYXRhJGVkaXZ5ID0gbXlEYXRhJGUvbXlEYXRhJGBBY3R1YWwgVmFsdWVgXG5zdW0oYWJzKG15RGF0YSRlZGl2eSkpL25yb3cobXlEYXRhKSoxMDBcbmBgYCJ9 -->
+<pre class="r"><code>myData$edivy = myData$e/myData$`Actual Value`
+sum(abs(myData$edivy))/nrow(myData)*100</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDUxLjI4ODQ1XG4ifQ== -->
+<pre><code>[1] 51.28845</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNoYXB0ZXIgOCBQcm9ibGVtIFNldCBTb2x1dGlvbnMiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7ciBwYWNrYWdlc30NCmxpYnJhcnkoZ2dwbG90MikNCmxpYnJhcnkocmVhZHhsKQ0KYGBgDQoNCiMjIyA4LjENCg0KYGBge3IgOC4xZGF0YX0NCm15RGF0YSA9IHJlYWRfeGxzeCgiQ2g4X1ExX0RhdGFfRmlsZS54bHN4IikNCmBgYA0KDQpgYGB7ciA4LjFhfQ0Kc3FydCgobXlEYXRhJHgxWzFdLW15RGF0YSR4MVsyXSleMiArIChteURhdGEkeDJbMV0tbXlEYXRhJHgyWzJdKV4yKQ0KYGBgDQoNCmBgYHtyIDguMWJ9DQphYnMobXlEYXRhJHgxWzFdLW15RGF0YSR4MVsyXSkgKyBhYnMobXlEYXRhJHgyWzFdLW15RGF0YSR4MlsyXSkNCmBgYA0KDQpgYGB7ciA4LjFjfQ0KeDFtdSA9IG1lYW4obXlEYXRhJHgxKQ0KeDJtdSA9IG1lYW4obXlEYXRhJHgyKQ0KeDFzdGQgPSBzZChteURhdGEkeDEpDQp4MnN0ZCA9IHNkKG15RGF0YSR4MikNCm15RGF0YSR4MXN0ZCA9IChteURhdGEkeDEteDFtdSkveDFzdGQNCm15RGF0YSR4MnN0ZCA9IChteURhdGEkeDIteDJtdSkveDJzdGQNCnNxcnQoKG15RGF0YSR4MXN0ZFsxXS1teURhdGEkeDFzdGRbMl0pXjIgKyAobXlEYXRhJHgyc3RkWzFdLW15RGF0YSR4MnN0ZFsyXSleMikNCmBgYA0KDQpgYGB7ciA4LjFkfQ0KeDFtaW4gPSBtaW4obXlEYXRhJHgxKQ0KeDJtaW4gPSBtaW4obXlEYXRhJHgyKQ0KeDFyYW5nZSA9IG1heChteURhdGEkeDEpLXgxbWluDQp4MnJhbmdlID0gbWF4KG15RGF0YSR4MikteDJtaW4NCm15RGF0YSR4MW1tID0gKG15RGF0YSR4MS14MW1pbikveDFyYW5nZQ0KbXlEYXRhJHgybW0gPSAobXlEYXRhJHgyLXgybWluKS94MnJhbmdlDQpzcXJ0KChteURhdGEkeDFtbVsxXS1teURhdGEkeDFtbVsyXSleMiArIChteURhdGEkeDJtbVsxXS1teURhdGEkeDJtbVsyXSleMikNCmBgYA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkNoYXB0ZXIgOCBQcm9ibGVtIFNldCBTb2x1dGlvbnMiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpgYGB7ciBwYWNrYWdlc30NCmxpYnJhcnkoZ2dwbG90MikNCmxpYnJhcnkocmVhZHhsKQ0Kc2V0d2QoIkM6L1VzZXJzL3Rkcmd2L0RvY3VtZW50cy9HaXRIdWIvRklONjU3MkZhbGwyMDIwL1Byb2JsZW0gU2V0cy9DaDgiKQ0KYGBgDQoNCiMjIyA4LjENCg0KYGBge3IgOC4xZGF0YX0NCm15RGF0YSA9IHJlYWRfeGxzeCgiQ2g4X1ExX0RhdGFfRmlsZS54bHN4IikNCmBgYA0KDQpDYWxjdWxhdGUgRXVjbGlkZWFuIGRpc3RhbmNlIGJldHdlZW4gZmlyc3QgdHdvIG9ic2VydmF0aW9uczoNCmBgYHtyIDguMWF9DQpzcXJ0KChteURhdGEkeDFbMV0tbXlEYXRhJHgxWzJdKV4yICsgKG15RGF0YSR4MlsxXS1teURhdGEkeDJbMl0pXjIpDQpgYGANCg0KQ2FsY3VsYXRlIE1hbmhhdHRhbiBkaXN0YW5jZSBiZXR3ZWVuIGZpcnN0IHR3byBvYnNlcnZhdGlvbnM6DQpgYGB7ciA4LjFifQ0KYWJzKG15RGF0YSR4MVsxXS1teURhdGEkeDFbMl0pICsgYWJzKG15RGF0YSR4MlsxXS1teURhdGEkeDJbMl0pDQpgYGANCg0KU3RhbmRhcmRpemUgeDEgYW5kIHgyLCBhbmQgdGhlbiByZWNhbGN1bGF0ZSBFdWNsaWRlYW4gZGlzdGFuY2U6DQpgYGB7ciA4LjFjfQ0KeDFtdSA9IG1lYW4obXlEYXRhJHgxKQ0KeDJtdSA9IG1lYW4obXlEYXRhJHgyKQ0KeDFzdGQgPSBzZChteURhdGEkeDEpDQp4MnN0ZCA9IHNkKG15RGF0YSR4MikNCm15RGF0YSR4MXN0ZCA9IChteURhdGEkeDEteDFtdSkveDFzdGQNCm15RGF0YSR4MnN0ZCA9IChteURhdGEkeDIteDJtdSkveDJzdGQNCnNxcnQoKG15RGF0YSR4MXN0ZFsxXS1teURhdGEkeDFzdGRbMl0pXjIgKyAobXlEYXRhJHgyc3RkWzFdLW15RGF0YSR4MnN0ZFsyXSleMikNCmBgYA0KDQpNaW4tbWF4IG5vcm1hbGl6ZSB4MSBhbmQgeDIsIGFuZCB0aGVuIHJlY2FsY3VsYXRlIEV1Y2xpZGVhbiBkaXN0YW5jZToNCmBgYHtyIDguMWR9DQp4MW1pbiA9IG1pbihteURhdGEkeDEpDQp4Mm1pbiA9IG1pbihteURhdGEkeDIpDQp4MXJhbmdlID0gbWF4KG15RGF0YSR4MSkteDFtaW4NCngycmFuZ2UgPSBtYXgobXlEYXRhJHgyKS14Mm1pbg0KbXlEYXRhJHgxbW0gPSAobXlEYXRhJHgxLXgxbWluKS94MXJhbmdlDQpteURhdGEkeDJtbSA9IChteURhdGEkeDIteDJtaW4pL3gycmFuZ2UNCnNxcnQoKG15RGF0YSR4MW1tWzFdLW15RGF0YSR4MW1tWzJdKV4yICsgKG15RGF0YSR4Mm1tWzFdLW15RGF0YSR4Mm1tWzJdKV4yKQ0KYGBgDQoNCg0KIyMjIDguMg0KDQpgYGB7ciA4LjJkYXRhfQ0Kcm0oIm15RGF0YSIpDQpteURhdGEgPSByZWFkX3hsc3goIkNoOF9RMTNfRGF0YV9GaWxlLnhsc3giKQ0KYGBgDQoNCkNhbGN1bGF0ZSBtYXRjaGluZyBjb2VmZmljaWVudHMgZm9yIGFsbCBwYWlyd2lzZSBjb21ib3MgZm9yIHJvd3MgMS01Og0KYGBge3IgOC4yYX0NCm1lYW4obXlEYXRhWzEsXT09bXlEYXRhWzIsXSkNCm1lYW4obXlEYXRhWzEsXT09bXlEYXRhWzMsXSkNCm1lYW4obXlEYXRhWzEsXT09bXlEYXRhWzQsXSkNCm1lYW4obXlEYXRhWzEsXT09bXlEYXRhWzUsXSkNCm1lYW4obXlEYXRhWzIsXT09bXlEYXRhWzMsXSkNCm1lYW4obXlEYXRhWzIsXT09bXlEYXRhWzQsXSkNCm1lYW4obXlEYXRhWzIsXT09bXlEYXRhWzUsXSkNCm1lYW4obXlEYXRhWzMsXT09bXlEYXRhWzQsXSkNCm1lYW4obXlEYXRhWzMsXT09bXlEYXRhWzUsXSkNCm1lYW4obXlEYXRhWzQsXT09bXlEYXRhWzUsXSkNCmBgYA0KDQoNCiMjIyA4LjMNCg0KU2VlIDxodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9Db25mdXNpb25fbWF0cml4PiBmb3IgYSBuaWNlIGJyZWFrZG93biBvZiB0aGUgY29uZnVzaW9uIG1hdHJpeCBhbmQgdGhlIHZhcmlvdXMgY2FsY3VsYXRpb25zIHRoYXQgY2FuIGJlIGRlcml2ZWQgZnJvbSBpdC4NCg0KOC4zYTogTWlzc2NsYXNzaWZpY2F0aW9uIFJhdGUgJD0gXGRmcmFje0ZQK0ZOfXtUUCtUTitGUCtGTn0kIG9yICRcZGZyYWN7SW5jb3JyZWN0IFByZWRpY3Rpb25zfXtUb3RhbCBOdW1iZXIgT2YgT2JzZXJ2YXRpb25zfSQNCg0KYGBge3IgOC4zYX0NCig4NysxMCkvKDI1NCs2NDkrODcrMTApDQpgYGANCg0KOC4zYjogQWNjdXJhY3kgJD0gXGRmcmFje1RQK1ROfXtUUCtUTitGUCtGTn0kIG9yICRcZGZyYWN7Q29ycmVjdCBQcmVkaWN0aW9uc317VG90YWwgTnVtYmVyIE9mIE9ic2VydmF0aW9uc30kDQpgYGB7ciA4LjNifQ0KKDI1NCs2NDkpLygyNTQrNjQ5Kzg3KzEwKQ0KYGBgDQoNCjguM2M6IFNlbnNpdGl2aXR5ICQ9IFxkZnJhY3tUUH17VFArRk59JCBvciAkXGRmcmFje0NvcnJlY3QgVHJ1ZSBQcmVkaWN0aW9uc317VG90YWwgTnVtYmVyIE9mIFRydWUgT2JzZXJ2YXRpb25zfSQNCmBgYHtyIDguM2N9DQooMjU0KS8oMjU0KzEwKQ0KYGBgDQoNCjguM2Q6IFByZWNpc2lvbiAkPSBcZGZyYWN7VFB9e1RQK0ZQfSQgb3IgJFxkZnJhY3tDb3JyZWN0IFRydWUgUHJlZGljdGlvbnN9e1RvdGFsIE51bWJlciBPZiBUcnVlIFByZWRpY3Rpb25zfSQNCmBgYHtyIDguM2R9DQooMjU0KS8oMjU0Kzg3KQ0KYGBgDQoNCjguM2U6IFNwZWNpZmljaXR5ICQ9IFxkZnJhY3tUTn17VE4rRlB9JCBvciAkXGRmcmFje0NvcnJlY3QgRmFsc2UgUHJlZGljdGlvbnN9e1RvdGFsIE51bWJlciBPZiBGYWxzZSAgT2JzZXJ2YXRpb25zfSQNCmBgYHtyIDguM2V9DQooNjQ5KS8oNjQ5Kzg3KQ0KYGBgDQoNCg0KDQojIyMgOC40DQoNCmBgYHtyIDguNGRhdGF9DQpybSgibXlEYXRhIikNCm15RGF0YSA9IHJlYWRfeGxzeCgiQ2g4X1EyM19EYXRhX0ZpbGUueGxzeCIpDQpgYGANCg0KTWFrZSBwcmVkaWN0aW9ucyBmb3IgY3V0b2ZmIG9mIDAuNSBhbmQgY2xhc3NpZnkgaW50byBjb25mdXNpb24gbWF0cml4IGxhYmVsczoNCmBgYHtyIDguNGExfQ0KbXlEYXRhJFByZWRpY3Rpb24gPSBteURhdGEkYENsYXNzIDEgUHJvYmFiaWxpdHlgID4gMC41DQpteURhdGEkVFAgPSBteURhdGEkYEFjdHVhbCBDbGFzc2A9PTEgJiBteURhdGEkUHJlZGljdGlvbj09MQ0KbXlEYXRhJFROID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0wICYgbXlEYXRhJFByZWRpY3Rpb249PTANCm15RGF0YSRGUCA9IG15RGF0YSRgQWN0dWFsIENsYXNzYD09MCAmIG15RGF0YSRQcmVkaWN0aW9uPT0xDQpteURhdGEkRk4gPSBteURhdGEkYEFjdHVhbCBDbGFzc2A9PTEgJiBteURhdGEkUHJlZGljdGlvbj09MA0KYGBgDQoNCk1pc2NsYXNzaWZpY2F0aW9uIFJhdGU6IChOb3RlOiAhPSBpcyB0aGUgUiBvcGVyYXRvciBmb3IgIm5vdCBlcXVhbCIpDQpgYGB7ciA4LjRhMn0NCihzdW0obXlEYXRhJEZQKStzdW0obXlEYXRhJEZOKSkvbnJvdyhteURhdGEpDQpgYGANCg0KQWNjdXJhY3kgUmF0ZTogKGVpdGhlciBkaXJlY3RseSBjYWxjdWxhdGUgb3IganVzdCBkbyAkMS0kTWlzY2xhc3NpZmljYXRpb24gUmF0ZSkNCmBgYHtyIDguNGEzfQ0KKHN1bShteURhdGEkVFApK3N1bShteURhdGEkVE4pKS9ucm93KG15RGF0YSkNCjEtKHN1bShteURhdGEkRlApK3N1bShteURhdGEkRk4pKS9ucm93KG15RGF0YSkNCmBgYA0KDQpTZW5zaXRpdml0eToNCmBgYHtyIDguNGE0fQ0Kc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRk4pKQ0KYGBgDQoNClByZWNpc2lvbjoNCmBgYHtyIDguNGE1fQ0Kc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRlApKQ0KYGBgDQoNClNwZWNpZmljaXR5Og0KYGBge3IgOC40YTZ9DQpzdW0obXlEYXRhJFROKS8oc3VtKG15RGF0YSRUTikrc3VtKG15RGF0YSRGUCkpDQpgYGANCg0KUmVwZWF0IGZvciBjdXRvZmY9MC4yNQ0KYGBge3IgOC40Yn0NCm15RGF0YSRQcmVkaWN0aW9uID0gbXlEYXRhJGBDbGFzcyAxIFByb2JhYmlsaXR5YCA+IDAuMjUNCm15RGF0YSRUUCA9IG15RGF0YSRgQWN0dWFsIENsYXNzYD09MSAmIG15RGF0YSRQcmVkaWN0aW9uPT0xDQpteURhdGEkVE4gPSBteURhdGEkYEFjdHVhbCBDbGFzc2A9PTAgJiBteURhdGEkUHJlZGljdGlvbj09MA0KbXlEYXRhJEZQID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0wICYgbXlEYXRhJFByZWRpY3Rpb249PTENCm15RGF0YSRGTiA9IG15RGF0YSRgQWN0dWFsIENsYXNzYD09MSAmIG15RGF0YSRQcmVkaWN0aW9uPT0wDQooc3VtKG15RGF0YSRGUCkrc3VtKG15RGF0YSRGTikpL25yb3cobXlEYXRhKQ0KKHN1bShteURhdGEkVFApK3N1bShteURhdGEkVE4pKS9ucm93KG15RGF0YSkNCnN1bShteURhdGEkVFApLyhzdW0obXlEYXRhJFRQKStzdW0obXlEYXRhJEZOKSkNCnN1bShteURhdGEkVFApLyhzdW0obXlEYXRhJFRQKStzdW0obXlEYXRhJEZQKSkNCnN1bShteURhdGEkVE4pLyhzdW0obXlEYXRhJFROKStzdW0obXlEYXRhJEZQKSkNCmBgYA0KDQpSZXBlYXQgZm9yIGN1dG9mZj0wLjc1DQpgYGB7ciA4LjRjfQ0KbXlEYXRhJFByZWRpY3Rpb24gPSBteURhdGEkYENsYXNzIDEgUHJvYmFiaWxpdHlgID4gMC43NQ0KbXlEYXRhJFRQID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0xICYgbXlEYXRhJFByZWRpY3Rpb249PTENCm15RGF0YSRUTiA9IG15RGF0YSRgQWN0dWFsIENsYXNzYD09MCAmIG15RGF0YSRQcmVkaWN0aW9uPT0wDQpteURhdGEkRlAgPSBteURhdGEkYEFjdHVhbCBDbGFzc2A9PTAgJiBteURhdGEkUHJlZGljdGlvbj09MQ0KbXlEYXRhJEZOID0gbXlEYXRhJGBBY3R1YWwgQ2xhc3NgPT0xICYgbXlEYXRhJFByZWRpY3Rpb249PTANCihzdW0obXlEYXRhJEZQKStzdW0obXlEYXRhJEZOKSkvbnJvdyhteURhdGEpDQooc3VtKG15RGF0YSRUUCkrc3VtKG15RGF0YSRUTikpL25yb3cobXlEYXRhKQ0Kc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRk4pKQ0Kc3VtKG15RGF0YSRUUCkvKHN1bShteURhdGEkVFApK3N1bShteURhdGEkRlApKQ0Kc3VtKG15RGF0YSRUTikvKHN1bShteURhdGEkVE4pK3N1bShteURhdGEkRlApKQ0KYGBgDQoNCg0KIyMjIDguNQ0KDQpgYGB7ciA4LjVkYXRhfQ0Kcm0oIm15RGF0YSIpDQpteURhdGEgPSByZWFkX3hsc3goIkNoOF9RMjdfRGF0YV9GaWxlLnhsc3giKQ0KYGBgDQoNClJNU0UgPSBSb290IE1lYW4gU3F1YXJlZCBFcnJvciAkPSBcc3FydHtcZGZyYWN7XHN1bSBlX2leMn17bn19JA0KYGBge3IgOC41YX0NCm15RGF0YSRlID0gbXlEYXRhJGBBY3R1YWwgVmFsdWVgIC0gbXlEYXRhJGBQcmVkaWN0ZWQgVmFsdWVgDQpteURhdGEkZXNxID0gbXlEYXRhJGVeMg0Kc3FydChzdW0obXlEYXRhJGVzcSkvbnJvdyhteURhdGEpKQ0KYGBgDQoNCk1FID0gTWVhbiBFcnJvciAkPSBcZGZyYWN7XHN1bSBlX2l9e259JA0KYGBge3IgOC41Yn0NCnN1bShteURhdGEkZSkvbnJvdyhteURhdGEpDQpgYGANCg0KTUFEID0gTWVhbiBBYnNvbHV0ZSBEZXZpYXRpb24gJD0gXGRmcmFje1xzdW0gfGVfaXx9e259JA0KYGBge3IgOC41Y30NCnN1bShhYnMobXlEYXRhJGUpKS9ucm93KG15RGF0YSkNCmBgYA0KDQpNUEUgPSBNZWFuIFBlcmNlbnRhZ2UgRXJyb3IgJD0gXGxlZnQoXGRmcmFjezF9e259XHN1bSBcZGZyYWN7ZV9pfXt5X2l9XHJpZ2h0KSgxMDBcJSkkDQpgYGB7ciA4LjVkfQ0KbXlEYXRhJGVkaXZ5ID0gbXlEYXRhJGUvbXlEYXRhJGBBY3R1YWwgVmFsdWVgDQpzdW0obXlEYXRhJGVkaXZ5KS9ucm93KG15RGF0YSkqMTAwDQpgYGANCg0KTUFQRSA9IE1lYW4gQWJzb2x1dGUgUGVyY2VudGFnZSBFcnJvciAkPSBcbGVmdChcZGZyYWN7MX17bn1cc3VtIFxsZWZ0fFxkZnJhY3tlX2l9e3lfaX1ccmlnaHR8XHJpZ2h0KSgxMDBcJSkkDQpgYGB7ciA4LjVlfQ0KbXlEYXRhJGVkaXZ5ID0gbXlEYXRhJGUvbXlEYXRhJGBBY3R1YWwgVmFsdWVgDQpzdW0oYWJzKG15RGF0YSRlZGl2eSkpL25yb3cobXlEYXRhKSoxMDANCmBgYA0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0K</div>
 
 
 
