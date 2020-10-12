@@ -12,7 +12,6 @@ install.packages('blsAPI')
 library(devtools)
 library(blsAPI)
 library(rjson)
-setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Group1/")
 ```
 
 See example 2 at <https://github.com/mikeasilva/blsAPI> and adapt code.
@@ -30,7 +29,7 @@ for (i in 1:nreq){
     endyear = 2020
   }
   payload <- list(
-  'seriesid'=c('LNS14000000'),
+  'seriesid'=c('LAUCN281070000000003'),
   'startyear'=startyear,
   'endyear'=endyear,
   'registrationkey'="978b3c8e8a2e45dfad02e13755fdd16f")

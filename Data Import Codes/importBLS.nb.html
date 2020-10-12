@@ -1755,23 +1755,27 @@ summary {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdGFsbC5wYWNrYWdlcygnYmxzQVBJJylcbmBgYCJ9 -->
 <pre class="r"><code>install.packages(&#39;blsAPI&#39;)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gaW5zdGFsbC5wYWNrYWdlcyA6IFVwZGF0aW5nIGxvYWRlZCBwYWNrYWdlc1xuIn0= -->
-<pre><code>Error in install.packages : Updating loaded packages</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiSW5zdGFsbGluZyBwYWNrYWdlIGludG8g46S847ixQzovVXNlcnMvdGltbWEvRG9jdW1lbnRzL1Ivd2luLWxpYnJhcnkvNC4w46S847iyXG4oYXMg46S847ixbGli46S847iyIGlzIHVuc3BlY2lmaWVkKVxudHJ5aW5nIFVSTCAnaHR0cHM6Ly9jcmFuLnJzdHVkaW8uY29tL2Jpbi93aW5kb3dzL2NvbnRyaWIvNC4wL2Jsc0FQSV8wLjIuMS56aXAnXG5Db250ZW50IHR5cGUgJ2FwcGxpY2F0aW9uL3ppcCcgbGVuZ3RoIDIwNjcyIGJ5dGVzICgyMCBLQilcbmRvd25sb2FkZWQgMjAgS0JcbiJ9 -->
+<pre><code>Installing package into 㤼㸱C:/Users/timma/Documents/R/win-library/4.0㤼㸲
+(as 㤼㸱lib㤼㸲 is unspecified)
+trying URL &#39;https://cran.rstudio.com/bin/windows/contrib/4.0/blsAPI_0.2.1.zip&#39;
+Content type &#39;application/zip&#39; length 20672 bytes (20 KB)
+downloaded 20 KB</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoicGFja2FnZSDigJhibHNBUEnigJkgc3VjY2Vzc2Z1bGx5IHVucGFja2VkIGFuZCBNRDUgc3VtcyBjaGVja2VkXG5cblRoZSBkb3dubG9hZGVkIGJpbmFyeSBwYWNrYWdlcyBhcmUgaW5cblx0QzpcXFVzZXJzXFx0aW1tYVxcQXBwRGF0YVxcTG9jYWxcXFRlbXBcXFJ0bXA2cG1Cdm9cXGRvd25sb2FkZWRfcGFja2FnZXNcbiJ9 -->
+<pre><code>package ‘blsAPI’ successfully unpacked and MD5 sums checked
+
+The downloaded binary packages are in
+    C:\Users\timma\AppData\Local\Temp\Rtmp6pmBvo\downloaded_packages</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkZXZ0b29scylcbmBgYCJ9 -->
-<pre class="r"><code>library(devtools)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiB1c2V0aGlzXG4ifQ== -->
-<pre><code>Loading required package: usethis</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShibHNBUEkpXG5saWJyYXJ5KHJqc29uKVxuc2V0d2QoXCJDOi9Vc2Vycy90aW1tYS9Eb2N1bWVudHMvR2l0SHViL0ZJTjY1NzJGYWxsMjAyMC9Hcm91cDEvXCIpXG5gYGAifQ== -->
-<pre class="r"><code>library(blsAPI)
-library(rjson)
-setwd(&quot;C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Group1/&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkZXZ0b29scylcbmxpYnJhcnkoYmxzQVBJKVxubGlicmFyeShyanNvbilcbmBgYCJ9 -->
+<pre class="r"><code>library(devtools)
+library(blsAPI)
+library(rjson)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1780,7 +1784,7 @@ setwd(&quot;C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Group1/&quot;)</code
 <p>Pull the data via the API:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW5lbXAgPSBkYXRhLmZyYW1lKClcbnN0YXJ0eWVhciA9IDE5NDhcbmVuZHllYXIgPSAxOTU3XG5ucmVxID0gY2VpbGluZygoMjAyMC0xOTQ4KS8xMClcbmZvciAoaSBpbiAxOm5yZXEpe1xuICBpZihlbmR5ZWFyID4gMjAyMCl7XG4gICAgZW5keWVhciA9IDIwMjBcbiAgfVxuICBwYXlsb2FkIDwtIGxpc3QoXG4gICdzZXJpZXNpZCc9YygnTE5TMTQwMDAwMDAnKSxcbiAgJ3N0YXJ0eWVhcic9c3RhcnR5ZWFyLFxuICAnZW5keWVhcic9ZW5keWVhcixcbiAgJ3JlZ2lzdHJhdGlvbmtleSc9XCI5NzhiM2M4ZThhMmU0NWRmYWQwMmUxMzc1NWZkZDE2ZlwiKVxuICByZXNwb25zZSA8LSBibHNBUEkocGF5bG9hZCwgMilcbiAganNvbiA8LSBmcm9tSlNPTihyZXNwb25zZSlcbiAgYXBpREYgPC0gZnVuY3Rpb24oZGF0YSl7XG4gICAgZGYgPC0gZGF0YS5mcmFtZSh5ZWFyPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgICAgcGVyaW9kPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgICAgcGVyaW9kTmFtZT1jaGFyYWN0ZXIoKSxcbiAgICAgICAgICAgICAgICAgICAgIHZhbHVlPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgICAgc3RyaW5nc0FzRmFjdG9ycz1GQUxTRSlcbiAgICBpIDwtIDBcbiAgICBmb3IoZCBpbiBkYXRhKXtcbiAgICAgIGkgPC0gaSArIDFcbiAgICAgIGRmW2ksXSA8LSB1bmxpc3QoZClcbiAgICB9XG4gICAgcmV0dXJuKGRmKVxuICB9XG4gIHVuZW1wcGFydCA8LSBhcGlERihqc29uJFJlc3VsdHMkc2VyaWVzW1sxXV0kZGF0YSlcbiAgdW5lbXAgPSByYmluZCh1bmVtcCx1bmVtcHBhcnQpXG4gIHN0YXJ0eWVhcj1zdGFydHllYXIrMTBcbiAgZW5keWVhcj1lbmR5ZWFyKzEwXG59XG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW5lbXAgPSBkYXRhLmZyYW1lKClcbnN0YXJ0eWVhciA9IDE5NDhcbmVuZHllYXIgPSAxOTU3XG5ucmVxID0gY2VpbGluZygoMjAyMC0xOTQ4KS8xMClcbmZvciAoaSBpbiAxOm5yZXEpe1xuICBpZihlbmR5ZWFyID4gMjAyMCl7XG4gICAgZW5keWVhciA9IDIwMjBcbiAgfVxuICBwYXlsb2FkIDwtIGxpc3QoXG4gICdzZXJpZXNpZCc9YygnTEFVQ04yODEwNzAwMDAwMDAwMDMnKSxcbiAgJ3N0YXJ0eWVhcic9c3RhcnR5ZWFyLFxuICAnZW5keWVhcic9ZW5keWVhcixcbiAgJ3JlZ2lzdHJhdGlvbmtleSc9XCI5NzhiM2M4ZThhMmU0NWRmYWQwMmUxMzc1NWZkZDE2ZlwiKVxuICByZXNwb25zZSA8LSBibHNBUEkocGF5bG9hZCwgMilcbiAganNvbiA8LSBmcm9tSlNPTihyZXNwb25zZSlcbiAgYXBpREYgPC0gZnVuY3Rpb24oZGF0YSl7XG4gICAgZGYgPC0gZGF0YS5mcmFtZSh5ZWFyPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgICAgcGVyaW9kPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgICAgcGVyaW9kTmFtZT1jaGFyYWN0ZXIoKSxcbiAgICAgICAgICAgICAgICAgICAgIHZhbHVlPWNoYXJhY3RlcigpLFxuICAgICAgICAgICAgICAgICAgICAgc3RyaW5nc0FzRmFjdG9ycz1GQUxTRSlcbiAgICBpIDwtIDBcbiAgICBmb3IoZCBpbiBkYXRhKXtcbiAgICAgIGkgPC0gaSArIDFcbiAgICAgIGRmW2ksXSA8LSB1bmxpc3QoZClcbiAgICB9XG4gICAgcmV0dXJuKGRmKVxuICB9XG4gIHVuZW1wcGFydCA8LSBhcGlERihqc29uJFJlc3VsdHMkc2VyaWVzW1sxXV0kZGF0YSlcbiAgdW5lbXAgPSByYmluZCh1bmVtcCx1bmVtcHBhcnQpXG4gIHN0YXJ0eWVhcj1zdGFydHllYXIrMTBcbiAgZW5keWVhcj1lbmR5ZWFyKzEwXG59XG5gYGAifQ== -->
 <pre class="r"><code>unemp = data.frame()
 startyear = 1948
 endyear = 1957
@@ -1790,7 +1794,7 @@ for (i in 1:nreq){
     endyear = 2020
   }
   payload &lt;- list(
-  &#39;seriesid&#39;=c(&#39;LNS14000000&#39;),
+  &#39;seriesid&#39;=c(&#39;LAUCN281070000000003&#39;),
   &#39;startyear&#39;=startyear,
   &#39;endyear&#39;=endyear,
   &#39;registrationkey&#39;=&quot;978b3c8e8a2e45dfad02e13755fdd16f&quot;)
@@ -1815,8 +1819,8 @@ for (i in 1:nreq){
   endyear=endyear+10
 }</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiZGF0YSBsZW5ndGggWzVdIGlzIG5vdCBhIHN1Yi1tdWx0aXBsZSBvciBtdWx0aXBsZSBvZiB0aGUgbnVtYmVyIG9mIGNvbHVtbnMgWzRdXG4ifQ== -->
-<pre><code>data length [5] is not a sub-multiple or multiple of the number of columns [4]</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiZGF0YSBsZW5ndGggWzddIGlzIG5vdCBhIHN1Yi1tdWx0aXBsZSBvciBtdWx0aXBsZSBvZiB0aGUgbnVtYmVyIG9mIGNvbHVtbnMgWzRdXG4ifQ== -->
+<pre><code>data length [7] is not a sub-multiple or multiple of the number of columns [4]</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5kZXggPC0gd2l0aCh1bmVtcCwgb3JkZXIoeWVhciwgcGVyaW9kKSlcbnVuZW1wID0gdW5lbXBbaW5kZXgsIF1cbmBgYCJ9 -->
 <pre class="r"><code>index &lt;- with(unemp, order(year, period))
@@ -1826,7 +1830,7 @@ unemp = unemp[index, ]</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVuZW1wbG95bWVudCBSYXRlcyBWaWEgQkxTIEFQSSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCkZpcnN0LCBpbnN0YWxsIHRoZSBCTFMgQVBJIGxpYnJhcnksIGlmIG5lZWRlZC4NCmBgYHtyIGluc3RhbGxfYmxzYXBpfQ0KaW5zdGFsbC5wYWNrYWdlcygnYmxzQVBJJykNCmBgYA0KDQpgYGB7ciBwYWNrYWdlc30NCmxpYnJhcnkoZGV2dG9vbHMpDQpsaWJyYXJ5KGJsc0FQSSkNCmxpYnJhcnkocmpzb24pDQpzZXR3ZCgiQzovVXNlcnMvdGltbWEvRG9jdW1lbnRzL0dpdEh1Yi9GSU42NTcyRmFsbDIwMjAvR3JvdXAxLyIpDQpgYGANCg0KU2VlIGV4YW1wbGUgMiBhdCA8aHR0cHM6Ly9naXRodWIuY29tL21pa2Vhc2lsdmEvYmxzQVBJPiBhbmQgYWRhcHQgY29kZS4NCg0KTm90ZTogQ3JlYXRlIHlvdXIgb3duIEFQSSBrZXkgYXQgPGh0dHBzOi8vZGF0YS5ibHMuZ292L3JlZ2lzdHJhdGlvbkVuZ2luZS8+IGFuZCBpbnNlcnQgdGhlIGtleSB0aGV5IGVtYWlsIHlvdSBhcyB0aGUgcmVnaXN0cmF0aW9uIGtleSBwYXJhbWV0ZXIuDQoNClB1bGwgdGhlIGRhdGEgdmlhIHRoZSBBUEk6IA0KYGBge3IgaW1wb3J0fQ0KdW5lbXAgPSBkYXRhLmZyYW1lKCkNCnN0YXJ0eWVhciA9IDE5NDgNCmVuZHllYXIgPSAxOTU3DQpucmVxID0gY2VpbGluZygoMjAyMC0xOTQ4KS8xMCkNCmZvciAoaSBpbiAxOm5yZXEpew0KICBpZihlbmR5ZWFyID4gMjAyMCl7DQogICAgZW5keWVhciA9IDIwMjANCiAgfQ0KICBwYXlsb2FkIDwtIGxpc3QoDQogICdzZXJpZXNpZCc9YygnTE5TMTQwMDAwMDAnKSwNCiAgJ3N0YXJ0eWVhcic9c3RhcnR5ZWFyLA0KICAnZW5keWVhcic9ZW5keWVhciwNCiAgJ3JlZ2lzdHJhdGlvbmtleSc9Ijk3OGIzYzhlOGEyZTQ1ZGZhZDAyZTEzNzU1ZmRkMTZmIikNCiAgcmVzcG9uc2UgPC0gYmxzQVBJKHBheWxvYWQsIDIpDQogIGpzb24gPC0gZnJvbUpTT04ocmVzcG9uc2UpDQogIGFwaURGIDwtIGZ1bmN0aW9uKGRhdGEpew0KICAgIGRmIDwtIGRhdGEuZnJhbWUoeWVhcj1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHBlcmlvZD1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHBlcmlvZE5hbWU9Y2hhcmFjdGVyKCksDQogICAgICAgICAgICAgICAgICAgICB2YWx1ZT1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHN0cmluZ3NBc0ZhY3RvcnM9RkFMU0UpDQogICAgaSA8LSAwDQogICAgZm9yKGQgaW4gZGF0YSl7DQogICAgICBpIDwtIGkgKyAxDQogICAgICBkZltpLF0gPC0gdW5saXN0KGQpDQogICAgfQ0KICAgIHJldHVybihkZikNCiAgfQ0KICB1bmVtcHBhcnQgPC0gYXBpREYoanNvbiRSZXN1bHRzJHNlcmllc1tbMV1dJGRhdGEpDQogIHVuZW1wID0gcmJpbmQodW5lbXAsdW5lbXBwYXJ0KQ0KICBzdGFydHllYXI9c3RhcnR5ZWFyKzEwDQogIGVuZHllYXI9ZW5keWVhcisxMA0KfQ0KaW5kZXggPC0gd2l0aCh1bmVtcCwgb3JkZXIoeWVhciwgcGVyaW9kKSkNCnVuZW1wID0gdW5lbXBbaW5kZXgsIF0NCmBgYA0KDQoNCg==</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlVuZW1wbG95bWVudCBSYXRlcyBWaWEgQkxTIEFQSSINCm91dHB1dDogaHRtbF9ub3RlYm9vaw0KLS0tDQoNCkZpcnN0LCBpbnN0YWxsIHRoZSBCTFMgQVBJIGxpYnJhcnksIGlmIG5lZWRlZC4NCmBgYHtyIGluc3RhbGxfYmxzYXBpfQ0KaW5zdGFsbC5wYWNrYWdlcygnYmxzQVBJJykNCmBgYA0KDQpgYGB7ciBwYWNrYWdlc30NCmxpYnJhcnkoZGV2dG9vbHMpDQpsaWJyYXJ5KGJsc0FQSSkNCmxpYnJhcnkocmpzb24pDQpgYGANCg0KU2VlIGV4YW1wbGUgMiBhdCA8aHR0cHM6Ly9naXRodWIuY29tL21pa2Vhc2lsdmEvYmxzQVBJPiBhbmQgYWRhcHQgY29kZS4NCg0KTm90ZTogQ3JlYXRlIHlvdXIgb3duIEFQSSBrZXkgYXQgPGh0dHBzOi8vZGF0YS5ibHMuZ292L3JlZ2lzdHJhdGlvbkVuZ2luZS8+IGFuZCBpbnNlcnQgdGhlIGtleSB0aGV5IGVtYWlsIHlvdSBhcyB0aGUgcmVnaXN0cmF0aW9uIGtleSBwYXJhbWV0ZXIuDQoNClB1bGwgdGhlIGRhdGEgdmlhIHRoZSBBUEk6IA0KYGBge3IgaW1wb3J0fQ0KdW5lbXAgPSBkYXRhLmZyYW1lKCkNCnN0YXJ0eWVhciA9IDE5NDgNCmVuZHllYXIgPSAxOTU3DQpucmVxID0gY2VpbGluZygoMjAyMC0xOTQ4KS8xMCkNCmZvciAoaSBpbiAxOm5yZXEpew0KICBpZihlbmR5ZWFyID4gMjAyMCl7DQogICAgZW5keWVhciA9IDIwMjANCiAgfQ0KICBwYXlsb2FkIDwtIGxpc3QoDQogICdzZXJpZXNpZCc9YygnTEFVQ04yODEwNzAwMDAwMDAwMDMnKSwNCiAgJ3N0YXJ0eWVhcic9c3RhcnR5ZWFyLA0KICAnZW5keWVhcic9ZW5keWVhciwNCiAgJ3JlZ2lzdHJhdGlvbmtleSc9Ijk3OGIzYzhlOGEyZTQ1ZGZhZDAyZTEzNzU1ZmRkMTZmIikNCiAgcmVzcG9uc2UgPC0gYmxzQVBJKHBheWxvYWQsIDIpDQogIGpzb24gPC0gZnJvbUpTT04ocmVzcG9uc2UpDQogIGFwaURGIDwtIGZ1bmN0aW9uKGRhdGEpew0KICAgIGRmIDwtIGRhdGEuZnJhbWUoeWVhcj1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHBlcmlvZD1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHBlcmlvZE5hbWU9Y2hhcmFjdGVyKCksDQogICAgICAgICAgICAgICAgICAgICB2YWx1ZT1jaGFyYWN0ZXIoKSwNCiAgICAgICAgICAgICAgICAgICAgIHN0cmluZ3NBc0ZhY3RvcnM9RkFMU0UpDQogICAgaSA8LSAwDQogICAgZm9yKGQgaW4gZGF0YSl7DQogICAgICBpIDwtIGkgKyAxDQogICAgICBkZltpLF0gPC0gdW5saXN0KGQpDQogICAgfQ0KICAgIHJldHVybihkZikNCiAgfQ0KICB1bmVtcHBhcnQgPC0gYXBpREYoanNvbiRSZXN1bHRzJHNlcmllc1tbMV1dJGRhdGEpDQogIHVuZW1wID0gcmJpbmQodW5lbXAsdW5lbXBwYXJ0KQ0KICBzdGFydHllYXI9c3RhcnR5ZWFyKzEwDQogIGVuZHllYXI9ZW5keWVhcisxMA0KfQ0KaW5kZXggPC0gd2l0aCh1bmVtcCwgb3JkZXIoeWVhciwgcGVyaW9kKSkNCnVuZW1wID0gdW5lbXBbaW5kZXgsIF0NCmBgYA0KDQoNCg==</div>
 
 
 

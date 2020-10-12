@@ -194,15 +194,44 @@ names(myData)[2] = "UnitNumber"
 ```
 
 Model 1: Linear Regression ($y=X*\beta+\epsilon$)
-```{r 7.7a}
+First, estimate the model.
+```{r 7.7a1}
 Model1 <- lm(TimePerUnit ~ UnitNumber, data = myData)
 summary(Model1)
 ```
 
+Plot the line of best fit against the individual data points.
+```{r 7.7a2}
+ggplot(myData,aes(y=TimePerUnit,x=UnitNumber))+geom_point()+geom_smooth(method="lm")
+```
+
+Then, calculate the residuals from deviations of predictions from observations ($e = y-\hat{y}$) and plot them against $x$ to see a clear pattern of non-linearity.
+```{r 7.7a3}
+myData$e1 = resid(Model1)
+ggplot(myData,aes(y=e1,x=UnitNumber))+geom_point()+geom_smooth(method="lm")
+```
+
+To explicitly test for a pattern of serial correlation, we can use the autocorrelation and partial autocorrelation functions, acf() and pacf() in R. The ACF effectively measures the correlation between $e_t$ and $e_{t-1}$, and then for $e_t$ and $e_{t-2}$, and so on for as many lags as desired (often time, but can also refer to dimensions such as space).
+```{r 7.7a4}
+acf(myData$e1)
+```
+
+The PACF is similar to the ACF, except it produces the estimates of each lag *after controlling for all shorter lags*. In other words, rather than measuring the correlation between $e_t$ and $e_{t-2}$, we'd measure the linear regression coefficient for the second lag from a regression including both the first and second lags.
+```{r 7.7a5}
+pacf(myData$e1)
+```
+
 Model 2: Logarithmic Regression ($y=\ln(X)*\beta+\epsilon$)
+
+Estimate model and then repeat previous tests for autocorrelation in residuals.
 ```{r 7.7b}
 Model2 <- lm(TimePerUnit ~ log(UnitNumber), data = myData)
 summary(Model2)
+ggplot(myData,aes(y=TimePerUnit,x=UnitNumber))+geom_point()+geom_smooth(method="lm",formula="y~log(x)")
+myData$e2 = resid(Model2)
+ggplot(myData,aes(y=e2,x=UnitNumber))+geom_point()+geom_smooth(method="lm",formula="y~log(x)")
+acf(myData$e1)
+pacf(myData$e1)
 ```
 
 Plug in unit 50 to the logarithmic model:
@@ -219,11 +248,22 @@ t
 myData = read_xlsx("Ch7_Q37_Data_File.xlsx")
 ```
 
-
+In log-log model (or log-linear since it is a *linear combination of the logarithms*), the coefficient estimates represent *elasticities* rather than *marginal effects*. Thus, a 1% change in $x$ corresponds with a $\beta_1$% change in $y$, and NOT a 1 unit change in $x$ corresponds with a $\beta_1$ unit change in $y$, as we would have in a regular linear regression model.
 ```{r 7.8a}
 Model1 <- lm(log(Q) ~ log(L)+log(K), data = myData)
 summary(Model1)
 ```
+
+Calculate the t-stat for the null hypothesis that $\beta_1\leq0.5$. Or $t = \dfrac{\hat{\beta}_1 - 0.5}{se(\hat{\beta}_1)}$.
+```{r 7.8b}
+se <- sqrt(diag(vcov(Model1)))
+tstat = (Model1$coefficients[2]-0.5)/se[2]
+tstat
+pval = 1-pt(tstat,nrow(myData)-1)
+pval
+```
+
+Since $p<0.05$, we can reject the null hypothesis and conclude that the alternative hypothesis ($\beta_1>0.5$) is true with 95% confidence (or $\alpha=0.05$).
 
 
 ### 7.9
@@ -237,7 +277,12 @@ Linear_Model <-lm(y ~ x1+x2, data =myData)
 summary(Linear_Model)
 ```
 
+
 ```{r 7.9a2}
+ggplot(myData,aes(y=y,x=x1))+geom_point()+geom_smooth(method="lm")
+```
+
+```{r 7.9a3}
 x1 = 12
 x2 = 8
 Linear_Model$coefficients[1]+Linear_Model$coefficients[2]*x1+Linear_Model$coefficients[3]*x2
@@ -248,18 +293,21 @@ Logistic regression model (aka logit) is designed to fit binary choice variables
 ```{r 7.9b1}
 Logistic_Model <- glm(y ~ x1 + x2, family = binomial(link = logit), data = myData)
 summary(Logistic_Model)
+```
 
+Create new data frame with $x_1$ consisting of 100 equally spaced points between the true min($x_1$) and max($x_1$). Set $x_2$ to be fixed at its mean. Then, predict the fitted values based on the logistic regression model estimates and plot them against the range of $x_1$ values ($x_2$ is held constant at its mean for the figure).
+```{r 7.9b2}
 newdat <- data.frame(x1=seq(min(myData$x1), max(myData$x1),len=100))
 newdat$x2 = mean(myData$x2)
 newdat$y = predict(Logistic_Model, newdata=newdat, type="response")
-plot(y~x1, data=myData, col="red4")
-lines(y ~ x1, newdat, col="green4", lwd=2)
+plot(y~x1, data=myData)
+lines(y ~ x1, newdat)
 ```
 
 Logistic fitted values:
 
 $\hat{y} = \dfrac{e^{\beta_0+\beta_1x_1+\beta_2x_2}}{1+e^{\beta_0+\beta_1x_1+\beta_2x_2}}$
-```{r 7.9b2}
+```{r 7.9b3}
 x1 = 12
 x2 = 8
 (exp(Logistic_Model$coefficients[1]+Logistic_Model$coefficients[2]*x1+Logistic_Model$coefficients[3]*x2))/(1+exp(Logistic_Model$coefficients[1]+Logistic_Model$coefficients[2]*x1+Logistic_Model$coefficients[3]*x2))
@@ -282,7 +330,7 @@ Model2 <- lm(y ~ x + d + x*d, data = TData)
 summary(Model2)
 ```
 
-
+RMSE = Root mean squared error or $RMSE = \sqrt{\dfrac{1}{N}\sum_{i=1}^{N} (y_i-\hat{y}_i)^2}$
 ```{r 7.10a2}
 Pred1 <- predict(Model1, VData)
 RMSE1 = sqrt(mean((VData$y-Pred1)^2))
