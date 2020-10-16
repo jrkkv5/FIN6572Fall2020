@@ -6,7 +6,6 @@ output: html_notebook
 ```{r packages}
 library(ggplot2)
 library(readxl)
-setwd("C:/Users/tdrgv/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch8")
 ```
 
 ### 8.1
@@ -210,27 +209,187 @@ sum(abs(myData$edivy))/nrow(myData)*100
 ```
 
 
+### 8.6
+
+Misclassification Rate:
+```{r 8.6a1}
+TP = 130
+TN = 27298
+FP = 2402
+FN = 170
+N = TP+TN+FP+FN
+(FP+FN)/(N)
+```
+
+Accuracy Rate: (either directly calculate or just do $1-$Misclassification Rate)
+```{r 8.6a2}
+(TP+TN)/N
+```
+
+Sensitivity:
+```{r 8.6a3}
+TP/(TP+FN)
+```
+
+Precision:
+```{r 8.6a4}
+TP/(TP+FP)
+```
+
+Specificity:
+```{r 8.6a5}
+TN/(TN+FP)
+```
 
 
+### 8.7
+
+```{r 8.7data}
+rm("myData")
+myData = read_xlsx("Ch8_Q34_Data_File.xlsx")
+```
+
+RMSE = Root Mean Squared Error $= \sqrt{\dfrac{\sum e_i^2}{n}}$
+```{r 8.7a1}
+myData$e1 = myData$`Actual Price` - myData$`Predicted Price 1`
+myData$e2 = myData$`Actual Price` - myData$`Predicted Price 2`
+myData$e1sq = myData$e1^2
+myData$e2sq = myData$e2^2
+sqrt(sum(myData$e1sq)/nrow(myData))
+sqrt(sum(myData$e2sq)/nrow(myData))
+```
+
+ME = Mean Error $= \dfrac{\sum e_i}{n}$
+```{r 8.7a2}
+sum(myData$e1)/nrow(myData)
+sum(myData$e2)/nrow(myData)
+```
+
+MAD = Mean Absolute Deviation $= \dfrac{\sum |e_i|}{n}$
+```{r 8.7a3}
+sum(abs(myData$e1))/nrow(myData)
+sum(abs(myData$e2))/nrow(myData)
+```
+
+MPE = Mean Percentage Error $= \left(\dfrac{1}{n}\sum \dfrac{e_i}{y_i}\right)(100\%)$
+```{r 8.7a4}
+myData$e1divy = myData$e1/myData$`Actual Price`
+myData$e2divy = myData$e2/myData$`Actual Price`
+sum(myData$e1divy)/nrow(myData)*100
+sum(myData$e2divy)/nrow(myData)*100
+```
+
+MAPE = Mean Absolute Percentage Error $= \left(\dfrac{1}{n}\sum \left|\dfrac{e_i}{y_i}\right|\right)(100\%)$
+```{r 8.7a5}
+sum(abs(myData$e1divy))/nrow(myData)*100
+sum(abs(myData$e2divy))/nrow(myData)*100
+```
 
 
+```{r 8.7b}
+myData$`Predicted Price 3` = 260500
+myData$e3 = myData$`Actual Price` - myData$`Predicted Price 3`
+myData$e3sq = myData$e3^2
+sqrt(sum(myData$e3sq)/nrow(myData))
+sum(myData$e3)/nrow(myData)
+sum(abs(myData$e3))/nrow(myData)
+myData$e3divy = myData$e3/myData$`Actual Price`
+sum(myData$e3divy)/nrow(myData)*100
+sum(abs(myData$e3divy))/nrow(myData)*100
+```
 
 
+### 8.8
+
+```{r 8.8data}
+rm("myData")
+myData = read_xlsx("Ch8_Q37_Data_File.xlsx")
+```
+
+Use prcomp() to calculate principal components for $x$ variables:
+```{r 8.8a1}
+pca = prcomp(myData)
+summary(pca)
+```
+
+Since Connect wants 4 decimals, we can calculate the Proportion of Variance for PC1 manually by using the sdev output from prcomp().
+```{r 8.8a2}
+pca$sdev[1]^2/(pca$sdev[1]^2+pca$sdev[2]^2+pca$sdev[3]^2)
+```
+
+First principal component: (prcomp stores these in the rotation element)
+```{r 8.8a3}
+pc1 = pca$rotation[,1]
+pc1
+```
+
+Standardize the three $x$ variables, so that having a larger variance does not disproportionately weight the principal components.
+```{r 8.8b1}
+stData = scale(myData)
+mean(stData[,1])
+mean(stData[,2])
+mean(stData[,3])
+sd(stData[,1])
+sd(stData[,2])
+sd(stData[,3])
+```
+
+Note: when calculating to Proportion of Variance, note that it requires the first two principal components to break the 85% threshold set in the problem (see Cumulative Proportion). Thus, we sum the first two variances in the numerator.
+```{r 8.8b2}
+pca2 = prcomp(stData)
+summary(pca2)
+(pca2$sdev[1]^2+pca2$sdev[2]^2)/(pca2$sdev[1]^2+pca2$sdev[2]^2+pca2$sdev[3]^2)
+```
+
+First principal component:
+```{r 8.8b3}
+pc1 = pca2$rotation[,1]
+pc1
+```
+
+Alternatively, to find the principal components from scratch, we first calculate the covariance matrix of the variables. Note, since we are using the standardized variables, the covariance matrix is equal to the correlation matrix (all variances are one).
+```{r 8.8alt1}
+Sigma = cov(stData)
+Sigma
+```
+
+Then, use eigen() to extract the eigenvalues and eigenvectors.
+```{r 8.8alt2}
+Seigen = eigen(Sigma)
+Seigen
+```
+
+Each of the three column vectors in the $vectors matrix above are the respective principal components (first principal component is first column associated with largest eigenvalue, and so on). Also note that the eigenvectors are the opposite sign as from prcomp(). The flipped signs have no impact on the variance of the transformed variables, so these are capturing the same variation.
 
 
+### 8.9
 
+```{r 8.9data}
+rm("myData")
+myData = read_xlsx("Ch8_Q48_Data_File.xlsx")
+```
 
+Use prcomp() to calculate principal components for variables. Note: here we use the scale=TRUE option, which standardizes the variables rather than doing it manually.
+```{r 8.9b}
+pca = prcomp(myData[,3:ncol(myData)],scale = TRUE)
+summary(pca)
+```
 
+If we examine the first PC, the largest weight is 0.41 for Yds.
+```{r 8.9c1}
+pca$rotation[,1]
+```
 
+For the second PC, the largest (in magnitude, not necessarily positive) weight is assigned to Int (-0.56).
+```{r 8.9c2}
+pca$rotation[,2]
+```
 
-
-
-
-
-
-
-
-
+The PC scores are in the x output from prcomp(). Let's attach that to the original dataset so we can identify each players PC score.
+```{r 8.9d}
+myData$pc1 = pca$x[,1]
+head(myData)
+```
 
 
 

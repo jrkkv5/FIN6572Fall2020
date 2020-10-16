@@ -314,6 +314,21 @@ x2 = 8
 ```
 
 
+Probit regression model designed to fit binary choice variables (dichotomous).
+```{r 7.9c1}
+ProbitModel <- glm(y ~ x1 + x2, family = binomial(link = probit), data = myData)
+summary(ProbitModel)
+```
+
+```{r 7.9c2}
+newdat <- data.frame(x1=seq(min(myData$x1), max(myData$x1),len=100))
+newdat$x2 = mean(myData$x2)
+newdat$y = predict(ProbitModel, newdata=newdat, type="response")
+plot(y~x1, data=myData)
+lines(y ~ x1, newdat)
+```
+
+
 ### 7.10
 
 ```{r 7.10data}
