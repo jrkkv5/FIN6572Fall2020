@@ -347,6 +347,11 @@ pc1 = pca2$rotation[,1]
 pc1
 ```
 
+
+
+
+
+
 Alternatively, to find the principal components from scratch, we first calculate the covariance matrix of the variables. Note, since we are using the standardized variables, the covariance matrix is equal to the correlation matrix (all variances are one).
 ```{r 8.8alt1}
 Sigma = cov(stData)
@@ -377,17 +382,20 @@ summary(pca)
 
 If we examine the first PC, the largest weight is 0.41 for Yds.
 ```{r 8.9c1}
-pca$rotation[,1]
+pc1 = pca$rotation[,1]
+pc1
 ```
 
 For the second PC, the largest (in magnitude, not necessarily positive) weight is assigned to Int (-0.56).
 ```{r 8.9c2}
-pca$rotation[,2]
+pc2 = pca$rotation[,2]
+pc2
 ```
 
 The PC scores are in the x output from prcomp(). Let's attach that to the original dataset so we can identify each players PC score.
 ```{r 8.9d}
 myData$pc1 = pca$x[,1]
+myData$pc2 = pca$x[,2]
 head(myData)
 ```
 
