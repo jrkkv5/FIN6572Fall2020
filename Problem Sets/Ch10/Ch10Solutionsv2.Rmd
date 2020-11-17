@@ -1,5 +1,5 @@
 ---
-title: "Chapter 10 Problem Set Solutions"
+title: "Chapter 10 Problem Set Solutions (using R 3.5 RNG)"
 output: html_notebook
 ---
 
@@ -15,7 +15,10 @@ library(randomForest)
 library(adabag)
 ```
 
-# WARNING: If you're using a version of R that is 3.6 or larger, then Connect is going to mark your answers as incorrect, even if they are correct. This is because R updated the way they generate random numbers, so the set.seed() function generates different random numbers than the version of R used in the textbook. Since these problem set grades do not factor into the final grade, don't worry about this. We will use the new random numbers, so the Connect solutions will be different.
+This line of code reverts R's random number generating algorithm back to the pre-3.6 approach. Thus, our results here should perfectly match those in Connect for this problem.
+```{r rngfix}
+suppressWarnings(RNGversion("3.5.3"))
+```
 
 ### 10.1
 
@@ -105,9 +108,9 @@ The "best-pruned" tree is determined by selecting the "simplest tree within one 
 
 d.
 
-We can also use the prune function to trim down the full tree to a specified CP level. Thus, if we set the CP=0.0144928 of the minimum error tree, then it does the pruning for us.
+We can also use the prune function to trim down the full tree to a specified CP level. Thus, if we set the CP=0.022 (slightly larger than that of the minimum error tree), then it does the pruning for us.
 ```{r 10.3d}
-pruned_tree <- prune(full_tree, cp = 0.0144928)
+pruned_tree <- prune(full_tree, cp = 0.022)
 prp(pruned_tree, type = 1, extra = 1, under = TRUE)
 ```
 

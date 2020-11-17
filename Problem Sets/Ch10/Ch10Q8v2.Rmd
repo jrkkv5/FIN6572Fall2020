@@ -1,0 +1,119 @@
+---
+title: "Chapter 10 Question 8 (using R 3.5 RNG)"
+output: html_notebook
+---
+
+
+```{r packages}
+library(ggplot2)
+library(readxl)
+library(caret)
+library(gains)
+library(rpart)
+library(rpart.plot)
+library(pROC)
+library(randomForest)
+library(adabag)
+```
+
+This line of code reverts R's random number generating algorithm back to the pre-3.6 approach. Thus, our results here should perfectly match those in Connect for this problem.
+```{r rngfix}
+suppressWarnings(RNGversion("3.5.3"))
+```
+
+### 10.8
+
+```{r 10.8data}
+myData = read_xlsx("Ch10_Q55_Data_File.xlsx")
+```
+
+Context: We are developing a predictive model to identify credit card fraud. The dataset that we have available to train the model has 200 observations of four variables. The dependent variable is an indicator for observed instances of fraud (13/200=6.5%). The available predictor variables are Amount (a categorical variable indicating the size of the transaction with 3 categories: low, medium, and high, which have transitivity), Online (a dummy variable indicating whether the transaction took place online), and Prior (an indicator if the cardholder has previously purchased this product).
+
+Preliminary work:
+```{r 10.8a1}
+myData$Fraud <- as.factor(myData$Fraud)
+set.seed(1)
+myIndex <- createDataPartition(myData$Fraud, p=0.6, list=FALSE)
+trainSet <- myData[myIndex,]
+validationSet <- myData[-myIndex,]
+set.seed(1)
+```
+
+Create bagging model using randomForest on all 3 predictor variables. Then predict validation set and compute confusion matrix.
+```{r 10.8a2}
+bagging_tree <- randomForest(Fraud ~., data = trainSet, ntree = 100, mtry = 3, importance = TRUE)
+predicted_class <- predict(bagging_tree, validationSet)
+confusionMatrix(predicted_class, validationSet$Fraud, positive = "1")
+```
+
+This randomization of the bagging model classifies all of the validation set observations as not being fraudulent. Thus, our accuracy is simply equal to the proportion of non-fraudulent transactions (74/79). In terms of sensitivity, or the rate of actual fraud that is detected, this is 0.0, indicating that none of the actual fraudulent transactions were flagged. 
+
+Predict validation probabilities, plot ROC curve, and compute AUC.
+```{r 10.8a3}
+predicted_prob <- predict(bagging_tree, validationSet, type= 'prob')
+roc_object <- roc(validationSet$Fraud, predicted_prob[,2])
+plot.roc(roc_object)
+auc(roc_object)
+```
+
+This ROC and AUC indicate a moderate degree of predictive performance.
+
+b.
+
+Create a random forest model using only two random predictors in each tree. Then predict validation set and compute confusion matrix.
+```{r 10.8b1}
+set.seed(1)
+randomforest_tree <- randomForest(Fraud ~., data = trainSet, ntree = 100, mtry = 2, importance = TRUE)
+predicted_class <- predict(randomforest_tree, validationSet)
+confusionMatrix(predicted_class, validationSet$Fraud, positive = "1")
+```
+The random forest model with two predictor variables in each tree simply results in identical results where all validation set predictions being classified as not fraud. This essentially replicates the naive rule and has an accuracy of 93.7%.
+
+So which model is better? Well in this case, both models make identical predictions for the validation set. The larger AUC relative to the other randomization indicates that these models can perform reasonably well for a small probability threshold for flagging. If we set a small threshold such that we achieve the 0.6 sensitivity in the ROC below, this means we would correctly identify 3 of the 5 instances of fraud. Since this corresponds with a large specificity, that low threshold for flagging only results in a few false positives (only a few non-fraud transactions were also flagged).
+
+Predict validation probabilities, plot ROC, and compute AUC. Also, plot the variable importance chart.
+```{r 10.8b2}
+predicted_prob <- predict(randomforest_tree, validationSet, type= 'prob')
+roc_object <- roc(validationSet$Fraud, predicted_prob[,2])
+plot.roc(roc_object)
+auc(roc_object)
+varImpPlot(randomforest_tree, type=1)
+```
+
+c.
+
+For each model, estimate the predicted probabilities for the validation set observations. Then calculate the gains table, cumulative lift, and decile lift charts for each model. Although the variant in Connect performs reasonably well, this model has a much flatter decile-wise lift chart (and thus, a less impressive cumulative lift chart). Similar to in Connect, both ensemble models generate identical predictions.
+```{r 10.8c}
+predicted_prob <- predict(bagging_tree, validationSet, type='prob')
+validationSet$Fraud <- as.numeric(as.character(validationSet$Fraud))
+gains_table <- gains(validationSet$Fraud, predicted_prob[,2])
+gains_table
+plot(c(0, gains_table$cume.pct.of.total*sum(validationSet$Fraud))~c(0, gains_table$cume.obs), xlab = "# of cases", ylab = "Cumulative", main="Cumulative Lift Chart", type="l")
+lines(c(0, sum(validationSet$Fraud))~c(0, dim(validationSet)[1]), col="red", lty=2)
+barplot(gains_table$mean.resp/mean(validationSet$Fraud), names.arg=gains_table$depth, xlab="Percentile", ylab="Lift", ylim=c(0,6), main="Decile-Wise Lift Chart")
+# Decile-Wise Lift Chart for the random trees model
+predicted_prob <- predict(randomforest_tree, validationSet, type='prob')
+validationSet$Fraud <- as.numeric(as.character(validationSet$Fraud))
+gains_table <- gains(validationSet$Fraud, predicted_prob[,2])
+gains_table
+plot(c(0, gains_table$cume.pct.of.total*sum(validationSet$Fraud))~c(0, gains_table$cume.obs), xlab = "# of cases", ylab = "Cumulative", main="Cumulative Lift Chart", type="l")
+lines(c(0, sum(validationSet$Fraud))~c(0, dim(validationSet)[1]), col="red", lty=2)
+barplot(gains_table$mean.resp/mean(validationSet$Fraud), names.arg=gains_table$depth, xlab="Percentile", ylab="Lift", ylim=c(0,6), main="Decile-Wise Lift Chart")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
