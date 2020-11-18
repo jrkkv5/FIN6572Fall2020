@@ -117,7 +117,7 @@ print(run.time)
 
 Second run is with parallelization:
 ```{r 10.8pt2b}
-cl<-makePSOCKcluster(2) 
+cl<-makePSOCKcluster(6) 
 registerDoParallel(cl) 
 start.time<-proc.time() 
 model2<-train(Fraud~., data=trainSet, method='rf') 
@@ -127,7 +127,10 @@ print(run.time)
 stopCluster(cl) 
 ```
 
-
+So parallelization actually makes that run slower. My guess is that the overhead (the process of allocating the computations across the cores and managing the concurrent instances) takes up the bulk of the time. So let's try this with a larger dataset:
+```{r partest}
+myData = read_xlsx("jaggia_ba_1e_House_Price.xlsx")
+```
 
 
 
