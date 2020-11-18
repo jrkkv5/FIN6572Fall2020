@@ -102,9 +102,30 @@ barplot(gains_table$mean.resp/mean(validationSet$Fraud), names.arg=gains_table$d
 ```
 
 
+### Part 2: Ensemble Methods in Parellel
 
+For bagging and random forest algorithms, trees are generated independently (tree 1 does not influence tree 2). So by splitting the task of generating the many trees among your various cpu cores, you can improve computational efficiency.
 
+First run is without parallelization:
+```{r 10.8pt2a}
+start.time<-proc.time() 
+model1<-train(Fraud~., data=trainSet, method='rf') 
+stop.time<-proc.time() 
+run.time<-stop.time -start.time 
+print(run.time) 
+```
 
+Second run is with parallelization:
+```{r 10.8pt2b}
+cl<-makePSOCKcluster(2) 
+registerDoParallel(cl) 
+start.time<-proc.time() 
+model2<-train(Fraud~., data=trainSet, method='rf') 
+stop.time<-proc.time() 
+run.time<-stop.time -start.time 
+print(run.time) 
+stopCluster(cl) 
+```
 
 
 
