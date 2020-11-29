@@ -1,0 +1,374 @@
+---
+title: "Chapter 7 Problem Set Solutions"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r packages}
+library(ggplot2)
+library(readxl)
+setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch7")
+```
+
+### 7.1
+
+```{r 7.1data}
+myData = read_xlsx("Ch7_Q4_Data_File.xlsx")
+```
+
+Model 1 (No Interaction):
+```{r 7.1a}
+Model1 <- lm(y ~ x + d1 + d2, data = myData)
+summary(Model1)
+```
+
+Model 2 (Interaction):
+```{r 7.1b}
+Model2 <- lm(y ~ x + d1 + d2 + d1*d2, data = myData)
+summary(Model2)
+```
+
+Calculate predicted values from Model 1.
+```{r 7.1c}
+x = 20
+d1 = 1
+d2 = 0
+Model1$coefficients[1] + Model1$coefficients[2]*x + Model1$coefficients[3]*d1 + Model1$coefficients[4]*d2
+d2 = 1
+Model1$coefficients[1] + Model1$coefficients[2]*x + Model1$coefficients[3]*d1 + Model1$coefficients[4]*d2
+```
+
+
+### 7.2
+
+```{r 7.2data}
+myData = read_xlsx("Ch7_Q9_Data_File.xlsx")
+```
+
+a.1 Multiple Linear Regression Model:
+```{r 7.2a1}
+Model1 <- lm(Income~ Hours + Hot + Holiday, data = myData)
+summary(Model1)
+```
+
+a.2 Predict scenarios:
+```{r 7.2a2}
+hours = 6
+hot = 1
+holiday = 1
+Model1$coefficients[1] + Model1$coefficients[2]*hours + Model1$coefficients[3]*hot + Model1$coefficients[4]*holiday
+holiday = 0
+Model1$coefficients[1] + Model1$coefficients[2]*hours + Model1$coefficients[3]*hot + Model1$coefficients[4]*holiday
+```
+
+b.1 Multiple Linear Regression Model (with Interaction):
+```{r 7.2b1}
+Model2 <- lm(Income ~ Hours + Hot + Holiday + Hot*Holiday, data = myData)
+summary(Model2)
+```
+
+b.2 Predict scenarios:
+```{r 7.2b2}
+hours = 6
+hot = 1
+holiday = 1
+Model2$coefficients[1] + Model2$coefficients[2]*hours + Model2$coefficients[3]*hot + Model2$coefficients[4]*holiday + Model2$coefficients[5]*hot*holiday
+holiday = 0
+Model2$coefficients[1] + Model2$coefficients[2]*hours + Model2$coefficients[3]*hot + Model2$coefficients[4]*holiday + Model2$coefficients[5]*hot*holiday
+```
+
+
+### 7.3
+
+```{r 7.3data}
+myData = read_xlsx("Ch7_Q11_Data_File.xlsx")
+```
+
+a. Model 1: Linear Regression of Consumption on Income
+```{r 7.3a}
+Model1 <- lm(Consumption ~ Income, data = myData)
+summary(Model1)
+income = 75000
+Model1$coefficients[1] + Model1$coefficients[2]*income
+ggplot(myData,aes(y=Consumption,x=Income))+geom_point()+geom_smooth(method="lm")
+```
+
+b. Model 2: Include urban dummy (allow for each type of community to have a distinct intercept, but same slope)
+```{r 7.3b1}
+Model2 <- lm(Consumption ~ Income + Urban, data = myData)
+summary(Model2)
+equation1=function(x){coef(Model2)[1]+coef(Model2)[2]*x}
+equation2=function(x){coef(Model2)[1]+coef(Model2)[2]*x+coef(Model2)[3]}
+ggplot(myData,aes(y=Consumption,x=Income,color=Urban))+geom_point()+
+        stat_function(fun=equation1,geom="line",color=scales::hue_pal()(2)[1])+
+        stat_function(fun=equation2,geom="line",color=scales::hue_pal()(2)[2])
+```
+
+Predict consumption for family with $75k income in urban vs. rural communities.
+```{r 7.3b2}
+urban = 1
+Model2$coefficients[1] + Model2$coefficients[2]*income + Model2$coefficients[3]*urban
+urban = 0
+Model2$coefficients[1] + Model2$coefficients[2]*income + Model2$coefficients[3]*urban
+```
+
+c. Model 3: Include interaction between urban dummy and income (allow for distinct intercepts and distinct slopes across the two community types)
+```{r 7.3c1}
+Model3 <- lm(Consumption ~ Income + Urban + Income*Urban, data = myData)
+summary(Model3)
+```
+
+Predict consumption for family with $75k income in urban vs. rural communities using Model 3.
+```{r 7.3c2}
+urban = 1
+Model3$coefficients[1] + Model3$coefficients[2]*income + Model3$coefficients[3]*urban + Model3$coefficients[4]*income*urban
+urban = 0
+Model3$coefficients[1] + Model3$coefficients[2]*income + Model3$coefficients[3]*urban + Model3$coefficients[4]*income*urban
+```
+
+
+### 7.4
+
+a. Plot the quadratic relation: $\hat{y} = 20 + 1.9x - 0.05x^2$. Plug in $x=10,20,30$ for predicted values.
+```{r 7.4}
+x = 0:40
+y = 20 + 1.9*x - 0.05*x^2
+plot(x,y,'l')
+```
+
+b. The predicted response $\hat{y}$ is maximized when first derivative is equal to 0:
+
+$\dfrac{dy}{dx} = 1.9 - 2*0.05x = 0 \implies x = \dfrac{1.9}{0.1} = 19$
+
+
+### 7.5
+
+Use each of the model designs to calculate the predicted repsonses.
+
+
+### 7.6
+
+```{r 7.6data}
+myData = read_xlsx("Ch7_Q33_Data_File.xlsx")
+```
+
+Model 1: Linear Model ($y=X\beta+\epsilon$)
+```{r 7.6a1}
+Model1 <- lm(Rent ~ Beds+Baths+Sqft, data = myData)
+summary(Model1)
+ggplot(myData,aes(y=Rent,x=Sqft))+geom_point()+geom_smooth(method="lm")
+```
+
+Model 2: Exponential Model ($\ln(y) = X\beta+\epsilon$)
+```{r 7.6a2}
+Model2 <- lm(log(Rent) ~ Beds+Baths+Sqft, data = myData)
+summary(Model2)
+```
+
+b. Predict rent for a \$1,500 sq.ft. house with 3 bed and 2 bath. For the exponential model, we must first calculate the bias correction term ($\sigma^2/2$) and add that before applying the exponential function.
+```{r 7.6b}
+bed = 3
+bath = 2
+size = 1500
+Model1$coefficients[1] + Model1$coefficients[2]*bed + Model1$coefficients[3]*bath + Model1$coefficients[4]*size
+SE<-summary(Model2)$sigma
+exp(Model2$coefficients[1] + Model2$coefficients[2]*bed + Model2$coefficients[3]*bath + Model2$coefficients[4]*size + (SE^2/2))
+```
+
+
+c. Calculate $R^2$ for Model 2 by calculating fitted values for y and computing the correlation between  the predicted and actual y values.
+```{r}
+Pred_lny<-predict(Model2)
+Pred_y<-exp(Pred_lny+SE^2/2)
+cor(myData$Rent, Pred_y)^2
+```
+
+
+### 7.7
+
+```{r 7.7data}
+myData = read_xlsx("Ch7_Q35_Data_File.xlsx")
+names(myData)[1] = "TimePerUnit"
+names(myData)[2] = "UnitNumber"
+```
+
+Model 1: Linear Regression ($y=X*\beta+\epsilon$)
+First, estimate the model.
+```{r 7.7a1}
+Model1 <- lm(TimePerUnit ~ UnitNumber, data = myData)
+summary(Model1)
+```
+
+Plot the line of best fit against the individual data points.
+```{r 7.7a2}
+ggplot(myData,aes(y=TimePerUnit,x=UnitNumber))+geom_point()+geom_smooth(method="lm")
+```
+
+Then, calculate the residuals from deviations of predictions from observations ($e = y-\hat{y}$) and plot them against $x$ to see a clear pattern of non-linearity.
+```{r 7.7a3}
+myData$e1 = resid(Model1)
+ggplot(myData,aes(y=e1,x=UnitNumber))+geom_point()+geom_smooth(method="lm")
+```
+
+To explicitly test for a pattern of serial correlation, we can use the autocorrelation and partial autocorrelation functions, acf() and pacf() in R. The ACF effectively measures the correlation between $e_t$ and $e_{t-1}$, and then for $e_t$ and $e_{t-2}$, and so on for as many lags as desired (often time, but can also refer to dimensions such as space).
+```{r 7.7a4}
+acf(myData$e1)
+```
+
+The PACF is similar to the ACF, except it produces the estimates of each lag *after controlling for all shorter lags*. In other words, rather than measuring the correlation between $e_t$ and $e_{t-2}$, we'd measure the linear regression coefficient for the second lag from a regression including both the first and second lags.
+```{r 7.7a5}
+pacf(myData$e1)
+```
+
+Model 2: Logarithmic Regression ($y=\ln(X)*\beta+\epsilon$)
+
+Estimate model and then repeat previous tests for autocorrelation in residuals.
+```{r 7.7b}
+Model2 <- lm(TimePerUnit ~ log(UnitNumber), data = myData)
+summary(Model2)
+ggplot(myData,aes(y=TimePerUnit,x=UnitNumber))+geom_point()+geom_smooth(method="lm",formula="y~log(x)")
+myData$e2 = resid(Model2)
+ggplot(myData,aes(y=e2,x=UnitNumber))+geom_point()+geom_smooth(method="lm",formula="y~log(x)")
+acf(myData$e1)
+pacf(myData$e1)
+```
+
+Plug in unit 50 to the logarithmic model:
+```{r 7.7c}
+u = 50
+t = Model2$coefficients[1] + Model2$coefficients[2]*log(u)
+t
+```
+
+
+### 7.8
+
+```{r 7.8data}
+myData = read_xlsx("Ch7_Q37_Data_File.xlsx")
+```
+
+In log-log model (or log-linear since it is a *linear combination of the logarithms*), the coefficient estimates represent *elasticities* rather than *marginal effects*. Thus, a 1% change in $x$ corresponds with a $\beta_1$% change in $y$, and NOT a 1 unit change in $x$ corresponds with a $\beta_1$ unit change in $y$, as we would have in a regular linear regression model.
+```{r 7.8a}
+Model1 <- lm(log(Q) ~ log(L)+log(K), data = myData)
+summary(Model1)
+```
+
+Calculate the t-stat for the null hypothesis that $\beta_1\leq0.5$. Or $t = \dfrac{\hat{\beta}_1 - 0.5}{se(\hat{\beta}_1)}$.
+```{r 7.8b}
+se <- sqrt(diag(vcov(Model1)))
+tstat = (Model1$coefficients[2]-0.5)/se[2]
+tstat
+pval = 1-pt(tstat,nrow(myData)-1)
+pval
+```
+
+Since $p<0.05$, we can reject the null hypothesis and conclude that the alternative hypothesis ($\beta_1>0.5$) is true with 95% confidence (or $\alpha=0.05$).
+
+
+### 7.9
+
+```{r 7.9data}
+myData = read_xlsx("Ch7_Q43_Data_File.xlsx")
+```
+
+```{r 7.9a1}
+Linear_Model <-lm(y ~ x1+x2, data =myData)
+summary(Linear_Model)
+```
+
+
+```{r 7.9a2}
+ggplot(myData,aes(y=y,x=x1))+geom_point()+geom_smooth(method="lm")
+```
+
+```{r 7.9a3}
+x1 = 12
+x2 = 8
+Linear_Model$coefficients[1]+Linear_Model$coefficients[2]*x1+Linear_Model$coefficients[3]*x2
+```
+
+
+Logistic regression model (aka logit) is designed to fit binary choice variables (dichotomous).
+```{r 7.9b1}
+Logistic_Model <- glm(y ~ x1 + x2, family = binomial(link = logit), data = myData)
+summary(Logistic_Model)
+```
+
+Create new data frame with $x_1$ consisting of 100 equally spaced points between the true min($x_1$) and max($x_1$). Set $x_2$ to be fixed at its mean. Then, predict the fitted values based on the logistic regression model estimates and plot them against the range of $x_1$ values ($x_2$ is held constant at its mean for the figure).
+```{r 7.9b2}
+newdat <- data.frame(x1=seq(min(myData$x1), max(myData$x1),len=100))
+newdat$x2 = mean(myData$x2)
+newdat$y = predict(Logistic_Model, newdata=newdat, type="response")
+plot(y~x1, data=myData)
+lines(y ~ x1, newdat)
+```
+
+Logistic fitted values:
+
+$\hat{y} = \dfrac{e^{\beta_0+\beta_1x_1+\beta_2x_2}}{1+e^{\beta_0+\beta_1x_1+\beta_2x_2}}$
+```{r 7.9b3}
+x1 = 12
+x2 = 8
+(exp(Logistic_Model$coefficients[1]+Logistic_Model$coefficients[2]*x1+Logistic_Model$coefficients[3]*x2))/(1+exp(Logistic_Model$coefficients[1]+Logistic_Model$coefficients[2]*x1+Logistic_Model$coefficients[3]*x2))
+```
+
+
+Probit regression model designed to fit binary choice variables (dichotomous).
+```{r 7.9c1}
+ProbitModel <- glm(y ~ x1 + x2, family = binomial(link = probit), data = myData)
+summary(ProbitModel)
+```
+
+```{r 7.9c2}
+newdat <- data.frame(x1=seq(min(myData$x1), max(myData$x1),len=100))
+newdat$x2 = mean(myData$x2)
+newdat$y = predict(ProbitModel, newdata=newdat, type="response")
+plot(y~x1, data=myData)
+lines(y ~ x1, newdat)
+```
+
+
+### 7.10
+
+```{r 7.10data}
+myData = read_xlsx("Ch7_Q56_Data_File.xlsx")
+```
+
+First, partition the dataset into training (first 30 obs) and testing sets (last 10 obs). Then fit model to training set.
+```{r 7.10a1}
+TData <- myData[1:30,]
+VData <- myData[31:40,]
+Model1 <- lm(y ~ x + d, data = TData)
+summary(Model1)
+Model2 <- lm(y ~ x + d + x*d, data = TData)
+summary(Model2)
+```
+
+RMSE = Root mean squared error or $RMSE = \sqrt{\dfrac{1}{N}\sum_{i=1}^{N} (y_i-\hat{y}_i)^2}$
+```{r 7.10a2}
+Pred1 <- predict(Model1, VData)
+RMSE1 = sqrt(mean((VData$y-Pred1)^2))
+Pred2 <- predict(Model2, VData)
+RMSE2 = sqrt(mean((VData$y-Pred2)^2))
+RMSE1
+RMSE2
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

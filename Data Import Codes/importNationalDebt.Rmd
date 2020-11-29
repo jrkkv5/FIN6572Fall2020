@@ -1,0 +1,158 @@
+---
+title: "U.S. National Debt Over Time"
+output: html_notebook
+---
+
+#### For this exercise, we will import a series of 223 monthly observations of the U.S. National Debt using the public API from <https://fiscaldata.treasury.gov> (see <https://twitter.com/stlouisfed/status/1290415916430262278>).
+
+The preliminary step is loading in the required packages. For this project, we will need the httr, jsonlite, ggplot2, and tidyr packages.
+```{r loadpackages, include=FALSE}
+library(httr)
+library(jsonlite)
+library(ggplot2)
+library(tidyr)
+```
+
+## Example API Request
+
+Before requesting the full series of the national debt, we will replicate the example API request from <https://fiscaldata.treasury.gov/datasets/monthly-statement-public-debt/>.
+
+First, we will specify the base url for the fiscal data API.
+```{r req1base}
+urlbase = "https://transparency.treasury.gov/services/api/fiscal_service"
+```
+
+Then, we add the endpoint for the "Summary of Treasury Securities Outstanding" table. The paste() function allows for us to concatenate the two strings to create the full url (the sep= option allows for inserting text between the strings being concatenated, which we do not want here).
+```{r reg1end}
+urlend = "/v1/debt/mspd/mspd_table_1"
+urlfull = paste(urlbase,urlend,sep="")
+urlfull
+```
+
+After we create the full url string, we now want to specify any parameters. For this example, we want to sort the data by date (record_date), specify a JSON response, and retrieve only the first observation after the sorting. The '-' before record_date in the first parameter sorts the dates in descending order so that the most recent observation is at the top. The JSON format option is actually unnecessary as it is the default response format, but if we wanted to receive csv or xml formatted response, we would specify that here. For requesting only the first observation, this consists of two parts: page[size] specifies how any observations in each response and page[number] specifies which 'page' to request (if we wanted the second observation, then we would keep page[size] as is and switch to page[number]=2). Note: the first parameter is indicated by '?' and each subsequent parameter is separated with an '&'.
+```{r req1opts}
+opt1 = "?sort=-record_date"
+opt2 = "&format=json"
+opt3 = "&page[number]=1&page[size]=1"
+request1 = paste(urlfull,opt1,opt2,opt3,sep='')
+request1
+```
+
+Now we can request the raw data from the API using the GET() function.
+```{r req1}
+response1 = GET(request1)
+response1
+```
+
+Since the content is returned in raw bytes, we must convert this to text, which will output the JSON response as a character array (we can also use rawToChar(response1$content), which will do the same thing).
+```{r req1json}
+jsonresponse1 = content(response1,"text")
+jsonresponse1
+```
+
+Then, to convert this JSON response to something workable in R, we use the fromJSON() function to convert the response to an R data frame, which is the data variable in the converted response (note: use '$' to specify a variable within a data frame). 
+```{r req1df}
+dfresponse1 = fromJSON(jsonresponse1)
+myData1 = dfresponse1$data
+myData1
+```
+**Alternatively, we could simply use the fromJSON() function on request1, which will cut out the intermediate steps (note: myData1 and myData are identical).**
+```{r req1df2}
+dfresponse = fromJSON(request1)
+myData = dfresponse$data
+myData
+```
+
+Now that we've imported the data into a R data frame, we need to format the variables using the "as" function. If we use class() to retrieve the variable type for each variable, everything is imported as character arrays.
+```{r req1class, error=TRUE}
+class(myData$record_date)
+class(myData$security_type_desc)
+class(myData$debt_held_public_mil_amt)
+myData$debt_held_public_mil_amt/2
+```
+
+For this example, we will just format one date and one numeric variable.
+```{r req1format}
+myData$record_date = as.Date(myData$record_date)
+class(myData$record_date)
+myData$debt_held_public_mil_amt = as.numeric(myData$debt_held_public_mil_amt)
+class(myData$debt_held_public_mil_amt)
+myData$debt_held_public_mil_amt/2
+```
+
+
+## Full API Request
+
+Now that we have worked through the example API request, let's move on to our project's goal of importing the full series of national debt observations.
+
+First, we need to adjust our parameters to reflect this new request. We will reuse opt1 from request1 to sort the observations. The next parameter specifies the variables that we want (the last seven variables are mostly redundant so we omit them). The third parameter specifies that we want all of the observations returned in this request (we do this by specifying a large number for page[size])
+```{r req2opts}
+req2opt1 = opt1
+req2opt2 = "&fields=record_date,security_type_desc,security_class_desc,debt_held_public_mil_amt,intragov_hold_mil_amt,total_mil_amt"
+req2opt3 = "&page[size]=10000"
+request2 = paste(urlfull,req2opt1,req2opt2,req2opt3,sep="")
+```
+
+Now make the request and save the response using fromJSON().
+```{r req2}
+dfresponse2 = fromJSON(request2)
+```
+
+Next, extract the data frame and format the variables. Lastly, print the first 20 observations of the data frame to get a better feel for the layout.
+```{r req2format}
+debtdf = dfresponse2$data
+debtdf$record_date = as.Date(debtdf$record_date)
+debtdf$debt_held_public_mil_amt = as.numeric(debtdf$debt_held_public_mil_amt)
+debtdf$intragov_hold_mil_amt = as.numeric(debtdf$intragov_hold_mil_amt)
+debtdf$total_mil_amt = as.numeric(debtdf$total_mil_amt)
+head(debtdf,20)
+```
+
+To make our figures a little cleaner later, we will also create a new variable that converts the units of the national debt into trillions of $USD, rather than millions.
+```{r tril}
+debtdf$total_tril_amt = debtdf$total_mil_amt/1000000
+```
+
+Since the table contains observations for the total national debt along with various subsets, we need to extract the subset of observations corresponding with total debt figures. As with many things in R, there are multiple ways to do this. Two examples the yield identical results are:
+```{r req2total}
+totaldebtdf = debtdf[which(debtdf$security_type_desc=="Total Public Debt Outstanding"),names(debtdf)]
+totaldebtdf2 = subset(debtdf,security_type_desc=="Total Public Debt Outstanding",names(debtdf))
+```
+
+Now our data frame consists of 223 monthly observations of the national debt from 01/2002 through 07/2020 (total_mil_amt). We can also see the breakdown between debt held by the public and debt held by governmental agencies with debt_held_public_mil_amt and intragov_hold_mil_amt.
+```{r req2final}
+head(totaldebtdf,10)
+```
+
+## Plotting the Data
+
+### Simple Line Chart
+
+To plot out the national debt over time, we will use the plot() function, and a few options to set some labels, which creates a simple line chart plotting the time series.
+```{r plotline}
+plot(totaldebtdf$record_date,totaldebtdf$total_tril_amt,type='l',main="U.S. National Debt Over Time",xlab="",ylab="Debt in Trillions of $USD",ylim=c(0,max(totaldebtdf$total_tril_amt))) 
+```
+
+### Stacked Line Chart 1: Publicly Held Debt vs. Intragovernmental Holdings
+
+To compare across publicly held debt and intragovernmental holdings, we must first combine the two variables together using the gather() function, convert to trillions, and then plot the stacked area chart using ggplot() along with a few labeling options.
+```{r plotstack1}
+helddf = totaldebtdf[,c("record_date","debt_held_public_mil_amt","intragov_hold_mil_amt")]
+helddf = gather(helddf,"Holder","mil_amt",-record_date)
+helddf$tril_amt = helddf$mil_amt/1000000
+ggplot(helddf, aes(x = record_date, y = tril_amt, fill = Holder)) + geom_area(position = 'stack') + xlab("") + ylab("Debt in Trillions of $USD") + labs(title="U.S. National Debt Over Time by Debtholder",fill="Debtholder")
+```
+
+### Stacked Line Chart 2: Debt by Marketability
+
+```{r plotstack2}
+stackdf = subset(debtdf,security_type_desc%in%c("Total Marketable","Total Nonmarketable"),names(debtdf))
+ggplot(stackdf, aes(x = record_date, y = total_tril_amt, fill = security_type_desc)) + geom_area(position = 'stack') + xlab("") + ylab("Debt in Trillions of $USD") + labs(title="U.S. National Debt Over Time by Marketability",fill="Marketability")
+```
+
+### Stacked Line Chart 3: Debt by Security Class
+
+```{r plotstack3}
+secclassdf = subset(debtdf,security_class_desc!="_",names(debtdf))
+ggplot(secclassdf, aes(x = record_date, y = total_tril_amt, fill = security_class_desc)) + geom_area(position = 'stack') + xlab("") + ylab("Debt in Trillions of $USD") + labs(title="U.S. National Debt Over Time by Security Class",fill="Security Class")
+```

@@ -1,0 +1,164 @@
+---
+title: "Chapter 5 Problem Set Solutions"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r packages}
+library(readxl)
+library(ggplot2)
+setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch5")
+```
+
+### 5.1
+
+a. $\Pr(X<325) = \Pr\left(Z<\dfrac{325-330}{4}\right)$
+```{r 5.1a}
+pnorm(325,330,4)
+```
+b. $\Pr\left(\bar{X}<325| N=6\right)=\Pr\left(Z<\dfrac{325-330}{4/\sqrt{6}}\right)$
+```{r 5.1b}
+pnorm(325,330,4/sqrt(6))
+```
+c. $\Pr\left(\bar{X}<325| N=6\right)=\Pr\left(Z<\dfrac{325-330}{4/\sqrt{12}}\right)$
+```{r 5.1c}
+pnorm(325,330,4/sqrt(12))
+```
+
+
+### 5.2
+
+$\Pr\left(\bar{X}>200\right)=\Pr\left(Z>\dfrac{200-180}{28/\sqrt{16}}\right)$
+```{r 5.2}
+1-pnorm(200, 180, 28/sqrt(16))
+```
+
+
+### 5.3
+
+a. $\Pr\left(X>35\right)=\Pr\left(Z>\dfrac{35-33.8}{3.5}\right)$
+```{r 5.3a}
+1-pnorm(35,33.8,3.5,1)
+```
+
+b. $\Pr\left(\bar{X}>35\right)=\Pr\left(Z>\dfrac{35-33.8}{3.5\sqrt(4)}\right)$
+```{r 5.3b}
+1-pnorm(35,33.8,3.5/sqrt(4))
+```
+
+c. $\left(\Pr\left(X>35\right)\right)^4$
+```{r 5.3c}
+(1-pnorm(35,33.8,3.5))^4
+```
+
+
+### 5.4
+
+a. $\mathbb{E}\left[\hat{P}\right] = 1/6 \approx 0.17 = p$
+$se\left(\hat{p}\right) = \sqrt{\dfrac{0.17(1-0.17)}{200}}$
+```{r 5.4a}
+se = sqrt(((1/6)*(5/6))/200)
+se
+```
+
+$\Pr\left(\bar{P}>20\right) = \Pr\left(Z>\dfrac{0.20-0.17}{\sqrt{\frac{0.17(1-0.17)}{200}}}\right)$
+
+Note: This is slightly off from the connect solution because why round when you don't have to.
+```{r 5.4b}
+1-pnorm(0.2,1/6,se)
+```
+
+
+### 5.5
+
+```{r 5.5data}
+myData = read_xlsx("Ch05_Q17_Data_File.xlsx")
+```
+
+A 90% confidence interval corresponds with an upper tail of 5% (0.95 in qt function gets this 95th percentile).
+```{r 5.5a}
+Error = qt(0.95,5) * sd(myData$Customers)/sqrt(6)
+Error
+```
+
+Construct 90% confidence interval from mean and margin of error.
+```{r 5.5b}
+Lower = mean(myData$Customers) - Error
+Upper = mean(myData$Customers) + Error
+c(Lower,Upper)
+```
+
+Alternatively, one can run a one-sample t-test.
+```{r 5.5alt}
+t.test(myData$Customers, conf.level=0.90)
+```
+
+
+### 5.6
+
+```{r 5.6data}
+myData = read_xlsx("Ch05_Q25_Data_File.xlsx")
+```
+
+
+```{r 5.6}
+t.test(myData$Debt, conf.level=0.90)
+t.test(myData$Debt, conf.level=0.95)
+sd(myData$Debt)
+```
+
+### 5.7
+
+For 95% confidence interval, upper tail is 97.5th quantile, which is then scaled by standard deviation of the estimate.
+```{r 5.7a}
+moe = qt(0.975,1025) * sqrt((0.47*(1-0.47))/1026)
+moe
+```
+
+```{r 5.7b}
+lb = 0.47 - moe
+ub = 0.47 + moe
+c(lb,ub)
+```
+
+
+### 5.9
+
+Calculate t-statistic:
+```{r 5.9b}
+t = (2.8-3)*sqrt(45)
+t
+```
+
+p-value:
+```{r 5.9c}
+pt(t,44)
+```
+
+
+### 5.10
+
+```{r 5.10data}
+myData = read_xlsx("Ch05_Q47__Data_File.xlsx")
+```
+
+Plot histogram and investigate:
+```{r 5.10b}
+hist(myData$Debt,
+     main="Histogram of Average Debt Payments Across 26 Metropolitan Areas",
+     xlab="Average Monthly Debt Payments",
+     breaks=5)
+```
+
+Calculate t-statstic:
+```{r 5.10c}
+mu = mean(myData$Debt)
+s = sd(myData$Debt)
+t = (900-mu)/(s/sqrt(length(myData$Debt)))
+t
+t.test(myData$Debt, mu=900)
+```
+
+
+

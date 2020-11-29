@@ -1,0 +1,97 @@
+---
+title: "Chapter 3 Problem Set"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r packages}
+library(ggplot2)
+library(readxl)
+setwd("C:/Users/timma/Documents/GitHub/FIN6572Fall2020/Problem Sets/Ch3")
+```
+
+## 3-3
+
+```{r 3-3}
+myData = read_xlsx("Ch3_Q17_Data_File.xlsx")
+hist(myData$`House Value`,
+     main="Histogram of Median House Values Across All 50 States",
+     xlim=c(0,600000),
+     xlab="Median House Value (in $)",
+     breaks=5)
+```
+
+## 3-4
+
+```{r 3-4}
+myData = read_xlsx("Ch3_Q25_Data_File.xlsx")
+table(myData$Brand)
+table(myData$Age)
+myTable = table(myData$Age, myData$Brand)
+myTable
+barplot(myTable, col=c('blue','red'), legend=c("At least 35 years old", "Younger than 35 years old"), xlab="Brand",  ylab="Count",  ylim=c(0,250))
+Age2 = rep("At least 35 years old",nrow(myData))
+Age2[which(myData$Age==1)]="Younger than 35 years old"
+myData$Age2=Age2
+ggplot(myData,aes(x=Brand,fill=Age2))+ 
+    geom_bar(position="stack")+
+    scale_color_manual(labels = c("Younger than 35 years old", "At least 35 years old"))+
+  labs(fill="")
+```
+
+## 3-5
+```{r 3-5}
+myData = read_xlsx("Ch3_Q31_Data_File.xlsx")
+ggplot(myData,aes(x=Exercise,y=Healthy)) +
+  geom_point() +
+  xlim(c(0,70)) +
+  ylim(c(74,92))
+ggplot(myData,aes(x=Smoking,y=Healthy)) +
+  geom_point() +
+  xlim(c(0,25)) +
+  ylim(c(74,92))
+```
+
+## 3-6 (Solution 1 is incorrect, Solution 2 is correct)
+```{r 3-6}
+myData = read_xlsx("Ch3_Q37_Data_File.xlsx")
+myTable <- table(myData$Color, myData$Size)
+myTable
+
+myData %>%
+  group_by(Color,Size) %>%
+  summarise(total=sum(Quantity))
+```
+
+## 3-7
+```{r 3-7}
+myData = read_xlsx("Ch3_Q39_Data_File.xlsx")
+mean(myData$A)
+sd(myData$A)
+mean(myData$B)
+sd(myData$B)
+```
+
+## 3-8
+```{r 3-8}
+myData = read_xlsx("Ch3_Q49_Data_File.xlsx")
+mean(myData$Technology)
+sd(myData$Technology)
+mean(myData$Energy)
+sd(myData$Energy)
+rf=2
+(mean(myData$Technology)-rf)/sd(myData$Technology)
+(mean(myData$Energy)-rf)/sd(myData$Energy)
+```
+
+## 3-10
+```{r 3-10}
+myData = read_xlsx("Ch3_Q61_Data_File.xlsx")
+
+boxplot(myData$Expenditures, main="Boxplot for Expenditures",xlab="Annual Expenditures (in $)", names=c("Expenditures"), horizontal=TRUE, col="gold")
+zmin = (min(myData$Expenditures)-mean(myData$Expenditures))/sd(myData$Expenditures)
+zmax = (max(myData$Expenditures)-mean(myData$Expenditures))/sd(myData$Expenditures)
+zmin
+zmax
+```

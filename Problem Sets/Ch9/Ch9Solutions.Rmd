@@ -1,0 +1,226 @@
+---
+title: "Chapter 9 Problem Set Solutions"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r packages}
+library(ggplot2)
+library(readxl)
+library(caret)
+library(gains)
+library(pROC)
+library(e1071)
+library(klaR)
+```
+
+# WARNING: If you're using a version of R that is 3.6 or larger, then Connect is going to mark your answers as incorrect, even if they are correct. This is because R updated the way they generate random numbers, so the set.seed() function generates different random numbers than the version of R used in the textbook. Since these problem set grades do not factor into the final grade, don't worry about this. We will use the new random numbers, so the Connect solutions will be different.
+
+### 9.1
+
+```{r 9.1data}
+myData = read_xlsx("Ch9_Q2_Data_File.xlsx")
+```
+
+First, standardize the $x$ variables using scale(). The $y$ variable is dichotomous, so it does not need to be standardized. Then create a new dataframe (myData1) with the standardized $x$'s and $y$.
+```{r 9.1a1}
+myData1<- scale(myData[2:5])
+myData1<- data.frame(myData1, myData$y)
+colnames(myData1)[5] <- 'y'
+myData1$y<- as.factor(myData1$y)
+```
+
+Set the seed for generating random numbers, which are used when partitioning the data for cross-validation. Then use createDataPartition() to randomly pick 60% of the observations, and then extract those observations and save as trainSet (validationSet are the remaining 40%).
+```{r 9.1a2}
+set.seed(1)
+myIndex<- createDataPartition(myData1$y, p=0.6, list=FALSE)
+trainSet <- myData1[myIndex,]
+validationSet <- myData1[-myIndex,]
+```
+
+The trainControl() function generates a bunch of settings to be used in train() later on. We tell it to use cross-validation (method="cv"), and that we want to use 10-fold c-v (number=10). The expand.grid() function simply generates values to use for $k$ when we implement KNN. So in this case, we test each k value from just 1 neighbor to up to 10 neighbors. Set the seed again, and then use train() to fit the KNN model. The output gives you the accuracy and kappa (<https://en.wikipedia.org/wiki/Cohen%27s_kappa>) for each k, and we select the k value that maximizes the statistics. Hence, for this example, our optimal k is 10.
+```{r 9.1a3}
+myCtrl <- trainControl(method="cv", number=10)
+myGrid <- expand.grid(.k=c(1:10))
+set.seed(1)
+KNN_fit <- train(y ~ ., data=trainSet, method = "knn", trControl=myCtrl, tuneGrid = myGrid)
+KNN_fit
+```
+
+Next, predict the fitted values for the validation set using the optimal KNN model. Then, generate the confusion matrix to get the performance evaluation metrics. Note: The Positive Predictive Value (PPV) is synonymous with precision.
+```{r 9.1b}
+KNN_Class <- predict(KNN_fit, newdata = validationSet)
+confusionMatrix(KNN_Class, validationSet$y, positive = '1')
+```
+
+The naive rule would just classify every observations into the predominant class. So this would mean we predict a 1 for every observation in the validation set. Then the accuracy rate is simply the proportion of actual "true" observations. So referring back to the confusion matrix, we have 22 total "true" observations (sum of column 2) and 43 total observations. Thus, our naive accuracy is 22/43 or 51.16%.
+
+Next, we will visualize the KNN predictions using the various performance charts from Chapter 8. First, we reformat $y$ to be a numeric variable instead of a factor variable. Then, predict the probabilities of each validation set observation belonging to each class.
+```{r}
+validationSet$y <- as.numeric(as.character(validationSet$y))
+KNN_Class_prob <- predict(KNN_fit, newdata = validationSet, type='prob')
+```
+
+The gains() function generates the gains table for the set of probabilities and actual observations.
+```{r}
+gains_table <- gains(validationSet$y, KNN_Class_prob[,2])
+gains_table
+```
+
+Plot out the cumulative lift chart:
+```{r}
+plot(c(0, gains_table$cume.pct.of.total*sum(validationSet$y))~c(0, gains_table$cume.obs), xlab = "# of cases", ylab = "Cumulative", main="Cumulative Lift Chart", type="l")
+lines(c(0, sum(validationSet$y))~c(0, dim(validationSet)[1]), col="red", lty=2)
+```
+
+Plot the Decile-wise Lift Chart:
+```{r}
+barplot(gains_table$mean.resp/mean(validationSet$y), names.arg=gains_table$depth, xlab="Percentile", ylab="Lift", ylim=c(0,3), main="Decile-Wise Lift Chart")
+```
+
+Plot the ROC curve and compute the AUC:
+```{r}
+roc_object <- roc(validationSet$y, KNN_Class_prob[,2])
+plot.roc(roc_object)
+auc(roc_object)
+```
+
+From these charts, we see that the KNN model provides fairly poor predictive performance. Since the cumulative lift chart and ROC curve are quite close to the baselines, this KNN model is just barely better than randomly guessing the classifications. Numerically, we can see that the AUC of 0.5866 is much closer to the baseline of 0.5 (randomly guessing) than it is to a perfect prediction model (AUC=1).
+
+
+### 9.2
+
+```{r 9.2data}
+myData = read_xlsx("Ch9_Q5_Data_File.xlsx")
+```
+
+First, standardize the $x$ variables ($y$ is binary and need not be standardized).
+```{r 9.2a1}
+myData1<- scale(myData[2:4])
+myData1<- data.frame(myData1, myData$y)
+colnames(myData1)[4] <- 'y'
+myData1$y<- as.factor(myData1$y)
+```
+
+Partition the data and fit the KNN model for $k\in{1,2,...,10}$.
+```{r 9.2a2}
+set.seed(1)
+myIndex<- createDataPartition(myData1$y, p=0.6, list=FALSE)
+trainSet <- myData1[myIndex,]
+validationSet <- myData1[-myIndex,]
+myCtrl <- trainControl(method="cv", number=10)
+myGrid <- expand.grid(.k=c(1:10))
+set.seed(1)
+KNN_fit <- train(y ~ ., data=trainSet, method = "knn", trControl=myCtrl, tuneGrid = myGrid)
+KNN_fit
+```
+So optimal $k$ is $k=10$. The misclassification rate for this $k$ is 0.2114 (or 1-0.7886 or 1-accuracy). To get the remaining performance measures, we generate the predictions for the validation set and compute the confusion matrix.
+```{r 9.2c}
+KNN_Class <- predict(KNN_fit, newdata = validationSet)
+confusionMatrix(KNN_Class, validationSet$y, positive = '1')
+```
+
+The naive rule simply classifies all cases into the predominant class. So since we have 200 "true" observations out of 399 total observations in the validation set, the sample proportion is 0.5013 (200/399). So the "predominant class" is "true" and all observations are predicted to be "true". In this case, we would correctly predict 200 of the 399 observations, so the accuracy for this rule is 0.5013.
+
+Then to compare the ROC curve and AUC to the baseline model, we plot out the ROC curve and compute the AUC.
+```{r 9.2d}
+KNN_Class_prob <- predict(KNN_fit, newdata = validationSet, type='prob')
+validationSet$y <- as.numeric(as.character(validationSet$y))
+gains_table <- gains(validationSet$y, KNN_Class_prob[,2])
+gains_table
+plot(c(0, gains_table$cume.pct.of.total*sum(validationSet$y))~c(0, gains_table$cume.obs), xlab = "# of cases", ylab = "Cumulative", main="Cumulative Lift Chart", type="l")
+lines(c(0, sum(validationSet$y))~c(0, dim(validationSet)[1]), col="red", lty=2)
+barplot(gains_table$mean.resp/mean(validationSet$y), names.arg=gains_table$depth, xlab="Percentile", ylab="Lift", ylim=c(0,3), main="Decile-Wise Lift Chart")
+roc_object <- roc(validationSet$y, KNN_Class_prob[,2])
+plot.roc(roc_object)
+auc(roc_object)
+```
+
+
+### 9.3
+
+```{r 9.3data}
+myData = read_xlsx("Ch9_Q19_Data_File.xlsx")
+myScoreData = read_xlsx("Ch9_Q19_Score_File.xlsx")
+```
+
+Reformat the $y$ variable to be a factor (categorical) variable rather than a numeric. The predictions (nb_class) are generated as factors, and the confusionMatrix function will produce an error if this isn't done.
+```{r 9.3a1}
+myData$y <- as.factor(myData$y)
+```
+
+Partition the data frame and train the model (method="nb" indicates we want to estimate a naïve Bayes classification model). After fitting, generate predictions for validation set and compute the confusion matrix.
+```{r 9.3a2}
+set.seed(1)
+myIndex<- createDataPartition(myData$y, p=0.6, list=FALSE)
+trainSet <- myData[myIndex,]
+validationSet <- myData[-myIndex,]
+myCtrl <- trainControl(method="cv", number=10)
+set.seed(1)
+nb_fit <- train(y ~., data = trainSet, method = "nb", trControl=myCtrl)
+nb_fit
+nb_class <- predict(nb_fit, newdata=validationSet)
+confusionMatrix(nb_class, validationSet$y, positive = 'Y')
+```
+
+Now that we've fitted and validated the model. Let's plot out the ROC and compute the AUC. First, generate the predicted probabilities for the validation set (note: the type='prob' option outputs predicted probabilities rather than binary predictions).
+```{r 9.3b}
+nb_Class_prob <- predict(nb_fit, newdata = validationSet, type='prob')
+roc_object <- roc(validationSet$y, nb_Class_prob[,2])
+plot.roc(roc_object)
+auc(roc_object)
+```
+
+Then lastly, we take the scoring dataset and compute the binary predictions based on our fitted naive bayes model.
+```{r 9.3c}
+nb_Score <- predict(nb_fit, newdata=myScoreData)
+nb_Score
+```
+
+
+### 9.4
+
+```{r 9.4data}
+myData = read_xlsx("Ch9_Q25_Data_File.xlsx")
+```
+
+Again, reformat the $y$ variable into a factor variable format. The bin the observations using cut(). The breaks indicate where to place the cutoffs for the bins. The right=FALSE option indicates that observations exactly on the cutoffs should be assigned to the bin to the left. The include.lowest=TRUE indicates that the largest (smallest if right=TRUE) observation should be included in the bin that borders it.
+```{r 9.4a}
+myData$y <- as.factor(myData$y)
+myData$x1 <- cut(myData$x1, breaks = c(0, 60, 400, 30000),labels = c("1", "2", "3"), right = FALSE, include.lowest = TRUE)
+myData$x2 <- cut(myData$x2, breaks = c(0, 160, 400, 800),labels = c("1", "2", "3"), right = FALSE, include.lowest = TRUE)
+head(myData)
+```
+
+Partition the data and fit the naive Bayes model.
+```{r 9.4b}
+set.seed(1)
+myIndex<- createDataPartition(myData$y, p=0.6, list=FALSE)
+trainSet <- myData[myIndex,]
+validationSet <- myData[-myIndex,]
+myCtrl <- trainControl(method="cv", number=10)
+set.seed(1)
+nb_fit <- train(y ~., data = trainSet, method = "nb", trControl=myCtrl)
+nb_fit
+nb_class <- predict(nb_fit, newdata=validationSet)
+confusionMatrix(nb_class, validationSet$y, positive = '1')
+```
+
+```{r 9.4c}
+nb_Class_prob <- predict(nb_fit, newdata = validationSet, type='prob')
+validationSet$y <- as.numeric(as.character(validationSet$y))
+roc_object <- roc(validationSet$y, nb_Class_prob[,2])
+plot.roc(roc_object)
+auc(roc_object)
+```
+
+
+
+
+
+
+
+
+
+

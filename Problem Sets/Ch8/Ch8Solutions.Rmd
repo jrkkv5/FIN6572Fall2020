@@ -1,0 +1,413 @@
+---
+title: "Chapter 8 Problem Set Solutions"
+output: html_notebook
+---
+
+```{r packages}
+library(ggplot2)
+library(readxl)
+```
+
+### 8.1
+
+```{r 8.1data}
+myData = read_xlsx("Ch8_Q1_Data_File.xlsx")
+```
+
+Calculate Euclidean distance between first two observations:
+```{r 8.1a}
+sqrt((myData$x1[1]-myData$x1[2])^2 + (myData$x2[1]-myData$x2[2])^2)
+```
+
+Calculate Manhattan distance between first two observations:
+```{r 8.1b}
+abs(myData$x1[1]-myData$x1[2]) + abs(myData$x2[1]-myData$x2[2])
+```
+
+Standardize x1 and x2, and then recalculate Euclidean distance:
+```{r 8.1c}
+x1mu = mean(myData$x1)
+x2mu = mean(myData$x2)
+x1std = sd(myData$x1)
+x2std = sd(myData$x2)
+myData$x1std = (myData$x1-x1mu)/x1std
+myData$x2std = (myData$x2-x2mu)/x2std
+sqrt((myData$x1std[1]-myData$x1std[2])^2 + (myData$x2std[1]-myData$x2std[2])^2)
+```
+
+Min-max normalize x1 and x2, and then recalculate Euclidean distance:
+```{r 8.1d}
+x1min = min(myData$x1)
+x2min = min(myData$x2)
+x1range = max(myData$x1)-x1min
+x2range = max(myData$x2)-x2min
+myData$x1mm = (myData$x1-x1min)/x1range
+myData$x2mm = (myData$x2-x2min)/x2range
+sqrt((myData$x1mm[1]-myData$x1mm[2])^2 + (myData$x2mm[1]-myData$x2mm[2])^2)
+```
+
+
+### 8.2
+
+```{r 8.2data}
+rm("myData")
+myData = read_xlsx("Ch8_Q13_Data_File.xlsx")
+```
+
+Calculate matching coefficients for all pairwise combos for rows 1-5:
+```{r 8.2a}
+mean(myData[1,]==myData[2,])
+mean(myData[1,]==myData[3,])
+mean(myData[1,]==myData[4,])
+mean(myData[1,]==myData[5,])
+mean(myData[2,]==myData[3,])
+mean(myData[2,]==myData[4,])
+mean(myData[2,]==myData[5,])
+mean(myData[3,]==myData[4,])
+mean(myData[3,]==myData[5,])
+mean(myData[4,]==myData[5,])
+```
+
+
+### 8.3
+
+See <https://en.wikipedia.org/wiki/Confusion_matrix> for a nice breakdown of the confusion matrix and the various calculations that can be derived from it.
+
+8.3a: Missclassification Rate $= \dfrac{FP+FN}{TP+TN+FP+FN}$ or $\dfrac{Incorrect Predictions}{Total Number Of Observations}$
+
+```{r 8.3a}
+(87+10)/(254+649+87+10)
+```
+
+8.3b: Accuracy $= \dfrac{TP+TN}{TP+TN+FP+FN}$ or $\dfrac{Correct Predictions}{Total Number Of Observations}$
+```{r 8.3b}
+(254+649)/(254+649+87+10)
+```
+
+8.3c: Sensitivity $= \dfrac{TP}{TP+FN}$ or $\dfrac{Correct True Predictions}{Total Number Of True Observations}$
+```{r 8.3c}
+(254)/(254+10)
+```
+
+8.3d: Precision $= \dfrac{TP}{TP+FP}$ or $\dfrac{Correct True Predictions}{Total Number Of True Predictions}$
+```{r 8.3d}
+(254)/(254+87)
+```
+
+8.3e: Specificity $= \dfrac{TN}{TN+FP}$ or $\dfrac{Correct False Predictions}{Total Number Of False  Observations}$
+```{r 8.3e}
+(649)/(649+87)
+```
+
+
+
+### 8.4
+
+```{r 8.4data}
+rm("myData")
+myData = read_xlsx("Ch8_Q23_Data_File.xlsx")
+```
+
+Make predictions for cutoff of 0.5 and classify into confusion matrix labels:
+```{r 8.4a1}
+myData$Prediction = myData$`Class 1 Probability` > 0.5
+myData$TP = myData$`Actual Class`==1 & myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 & myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 & myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 & myData$Prediction==0
+```
+
+Misclassification Rate: (Note: != is the R operator for "not equal")
+```{r 8.4a2}
+(sum(myData$FP)+sum(myData$FN))/nrow(myData)
+```
+
+Accuracy Rate: (either directly calculate or just do $1-$Misclassification Rate)
+```{r 8.4a3}
+(sum(myData$TP)+sum(myData$TN))/nrow(myData)
+1-(sum(myData$FP)+sum(myData$FN))/nrow(myData)
+```
+
+Sensitivity:
+```{r 8.4a4}
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))
+```
+
+Precision:
+```{r 8.4a5}
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))
+```
+
+Specificity:
+```{r 8.4a6}
+sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))
+```
+
+Repeat for cutoff=0.25
+```{r 8.4b}
+myData$Prediction = myData$`Class 1 Probability` > 0.25
+myData$TP = myData$`Actual Class`==1 & myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 & myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 & myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 & myData$Prediction==0
+(sum(myData$FP)+sum(myData$FN))/nrow(myData)
+(sum(myData$TP)+sum(myData$TN))/nrow(myData)
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))
+sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))
+```
+
+Repeat for cutoff=0.75
+```{r 8.4c}
+myData$Prediction = myData$`Class 1 Probability` > 0.75
+myData$TP = myData$`Actual Class`==1 & myData$Prediction==1
+myData$TN = myData$`Actual Class`==0 & myData$Prediction==0
+myData$FP = myData$`Actual Class`==0 & myData$Prediction==1
+myData$FN = myData$`Actual Class`==1 & myData$Prediction==0
+(sum(myData$FP)+sum(myData$FN))/nrow(myData)
+(sum(myData$TP)+sum(myData$TN))/nrow(myData)
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FN))
+sum(myData$TP)/(sum(myData$TP)+sum(myData$FP))
+sum(myData$TN)/(sum(myData$TN)+sum(myData$FP))
+```
+
+
+### 8.5
+
+```{r 8.5data}
+rm("myData")
+myData = read_xlsx("Ch8_Q27_Data_File.xlsx")
+```
+
+RMSE = Root Mean Squared Error $= \sqrt{\dfrac{\sum e_i^2}{n}}$
+```{r 8.5a}
+myData$e = myData$`Actual Value` - myData$`Predicted Value`
+myData$esq = myData$e^2
+sqrt(sum(myData$esq)/nrow(myData))
+```
+
+ME = Mean Error $= \dfrac{\sum e_i}{n}$
+```{r 8.5b}
+sum(myData$e)/nrow(myData)
+```
+
+MAD = Mean Absolute Deviation $= \dfrac{\sum |e_i|}{n}$
+```{r 8.5c}
+sum(abs(myData$e))/nrow(myData)
+```
+
+MPE = Mean Percentage Error $= \left(\dfrac{1}{n}\sum \dfrac{e_i}{y_i}\right)(100\%)$
+```{r 8.5d}
+myData$edivy = myData$e/myData$`Actual Value`
+sum(myData$edivy)/nrow(myData)*100
+```
+
+MAPE = Mean Absolute Percentage Error $= \left(\dfrac{1}{n}\sum \left|\dfrac{e_i}{y_i}\right|\right)(100\%)$
+```{r 8.5e}
+myData$edivy = myData$e/myData$`Actual Value`
+sum(abs(myData$edivy))/nrow(myData)*100
+```
+
+
+### 8.6
+
+Misclassification Rate:
+```{r 8.6a1}
+TP = 130
+TN = 27298
+FP = 2402
+FN = 170
+N = TP+TN+FP+FN
+(FP+FN)/(N)
+```
+
+Accuracy Rate: (either directly calculate or just do $1-$Misclassification Rate)
+```{r 8.6a2}
+(TP+TN)/N
+```
+
+Sensitivity:
+```{r 8.6a3}
+TP/(TP+FN)
+```
+
+Precision:
+```{r 8.6a4}
+TP/(TP+FP)
+```
+
+Specificity:
+```{r 8.6a5}
+TN/(TN+FP)
+```
+
+
+### 8.7
+
+```{r 8.7data}
+rm("myData")
+myData = read_xlsx("Ch8_Q34_Data_File.xlsx")
+```
+
+RMSE = Root Mean Squared Error $= \sqrt{\dfrac{\sum e_i^2}{n}}$
+```{r 8.7a1}
+myData$e1 = myData$`Actual Price` - myData$`Predicted Price 1`
+myData$e2 = myData$`Actual Price` - myData$`Predicted Price 2`
+myData$e1sq = myData$e1^2
+myData$e2sq = myData$e2^2
+sqrt(sum(myData$e1sq)/nrow(myData))
+sqrt(sum(myData$e2sq)/nrow(myData))
+```
+
+ME = Mean Error $= \dfrac{\sum e_i}{n}$
+```{r 8.7a2}
+sum(myData$e1)/nrow(myData)
+sum(myData$e2)/nrow(myData)
+```
+
+MAD = Mean Absolute Deviation $= \dfrac{\sum |e_i|}{n}$
+```{r 8.7a3}
+sum(abs(myData$e1))/nrow(myData)
+sum(abs(myData$e2))/nrow(myData)
+```
+
+MPE = Mean Percentage Error $= \left(\dfrac{1}{n}\sum \dfrac{e_i}{y_i}\right)(100\%)$
+```{r 8.7a4}
+myData$e1divy = myData$e1/myData$`Actual Price`
+myData$e2divy = myData$e2/myData$`Actual Price`
+sum(myData$e1divy)/nrow(myData)*100
+sum(myData$e2divy)/nrow(myData)*100
+```
+
+MAPE = Mean Absolute Percentage Error $= \left(\dfrac{1}{n}\sum \left|\dfrac{e_i}{y_i}\right|\right)(100\%)$
+```{r 8.7a5}
+sum(abs(myData$e1divy))/nrow(myData)*100
+sum(abs(myData$e2divy))/nrow(myData)*100
+```
+
+
+```{r 8.7b}
+myData$`Predicted Price 3` = 260500
+myData$e3 = myData$`Actual Price` - myData$`Predicted Price 3`
+myData$e3sq = myData$e3^2
+sqrt(sum(myData$e3sq)/nrow(myData))
+sum(myData$e3)/nrow(myData)
+sum(abs(myData$e3))/nrow(myData)
+myData$e3divy = myData$e3/myData$`Actual Price`
+sum(myData$e3divy)/nrow(myData)*100
+sum(abs(myData$e3divy))/nrow(myData)*100
+```
+
+
+### 8.8
+
+```{r 8.8data}
+rm("myData")
+myData = read_xlsx("Ch8_Q37_Data_File.xlsx")
+```
+
+Use prcomp() to calculate principal components for $x$ variables:
+```{r 8.8a1}
+pca = prcomp(myData)
+summary(pca)
+```
+
+Since Connect wants 4 decimals, we can calculate the Proportion of Variance for PC1 manually by using the sdev output from prcomp().
+```{r 8.8a2}
+pca$sdev[1]^2/(pca$sdev[1]^2+pca$sdev[2]^2+pca$sdev[3]^2)
+```
+
+First principal component: (prcomp stores these in the rotation element)
+```{r 8.8a3}
+pc1 = pca$rotation[,1]
+pc1
+```
+
+Standardize the three $x$ variables, so that having a larger variance does not disproportionately weight the principal components.
+```{r 8.8b1}
+stData = scale(myData)
+mean(stData[,1])
+mean(stData[,2])
+mean(stData[,3])
+sd(stData[,1])
+sd(stData[,2])
+sd(stData[,3])
+```
+
+Note: when calculating to Proportion of Variance, note that it requires the first two principal components to break the 85% threshold set in the problem (see Cumulative Proportion). Thus, we sum the first two variances in the numerator.
+```{r 8.8b2}
+pca2 = prcomp(stData)
+summary(pca2)
+(pca2$sdev[1]^2+pca2$sdev[2]^2)/(pca2$sdev[1]^2+pca2$sdev[2]^2+pca2$sdev[3]^2)
+```
+
+First principal component:
+```{r 8.8b3}
+pc1 = pca2$rotation[,1]
+pc1
+```
+
+
+
+
+
+
+Alternatively, to find the principal components from scratch, we first calculate the covariance matrix of the variables. Note, since we are using the standardized variables, the covariance matrix is equal to the correlation matrix (all variances are one).
+```{r 8.8alt1}
+Sigma = cov(stData)
+Sigma
+```
+
+Then, use eigen() to extract the eigenvalues and eigenvectors.
+```{r 8.8alt2}
+Seigen = eigen(Sigma)
+Seigen
+```
+
+Each of the three column vectors in the $vectors matrix above are the respective principal components (first principal component is first column associated with largest eigenvalue, and so on). Also note that the eigenvectors are the opposite sign as from prcomp(). The flipped signs have no impact on the variance of the transformed variables, so these are capturing the same variation.
+
+
+### 8.9
+
+```{r 8.9data}
+rm("myData")
+myData = read_xlsx("Ch8_Q48_Data_File.xlsx")
+```
+
+Use prcomp() to calculate principal components for variables. Note: here we use the scale=TRUE option, which standardizes the variables rather than doing it manually.
+```{r 8.9b}
+pca = prcomp(myData[,3:ncol(myData)],scale = TRUE)
+summary(pca)
+```
+
+If we examine the first PC, the largest weight is 0.41 for Yds.
+```{r 8.9c1}
+pc1 = pca$rotation[,1]
+pc1
+```
+
+For the second PC, the largest (in magnitude, not necessarily positive) weight is assigned to Int (-0.56).
+```{r 8.9c2}
+pc2 = pca$rotation[,2]
+pc2
+```
+
+The PC scores are in the x output from prcomp(). Let's attach that to the original dataset so we can identify each players PC score.
+```{r 8.9d}
+myData$pc1 = pca$x[,1]
+myData$pc2 = pca$x[,2]
+head(myData)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
